@@ -44,8 +44,6 @@
   </main>
 
   <!-- 你的 JS，如没有可不传 -->
-  <% if (jsSrc) { %>
-    <script src="<%= /js/login_page.js %>"></script>
-  <% } %>
+ <script src="<%= jsSrc || '/js/login_page.js' %>"></script>
 </body>
 </html>
