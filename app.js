@@ -28,8 +28,8 @@ app.get('/', (req, res) => {
     version: '1.0.0',
 
     // 覆盖为你的真实 CSS/JS 路径
-    cssHref: '/css/login.css', // 例如 '/css/app.css'
- jsSrc: '/js/login.js',    // 如果有前端脚本，取消注释并设置路径
+    cssHref: '/css/welcome.css', // 例如 '/css/app.css'
+ jsSrc: '/js/welcome.js',    // 如果有前端脚本，取消注释并设置路径
   });
 });
 // 占位路由（按需替换为真实页面）
@@ -55,8 +55,8 @@ app.get('/login', (req, res) => {
     facebookHref: '/auth/facebook',
 
     // 覆盖为你的真实 CSS/JS 路径
-    cssHref: '/css/login_page.css', // 例如 '/css/app.css'
-    jsSrc: '/js/login_page.js',    // 如有前端脚本，取消注释并设置路径
+    cssHref: '/css/login.css', // 例如 '/css/app.css'
+    jsSrc: '/js/login.js',    // 如有前端脚本，取消注释并设置路径
   });
 });
 
