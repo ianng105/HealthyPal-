@@ -23,6 +23,10 @@ app.get('/login', (req, res) => {
   res.render('login'); // 登录页
 });
 
+app.get('/register', (req, res) => {
+  res.render('register'); // 登录页
+});
+
 app.get('/login/main', (req, res) => {
   res.render('main'); // 主界面
 });
