@@ -23,10 +23,6 @@ app.get('/register', (req, res) => {
   res.render('register'); // 注册页
 });
 
-app.get('/login/main', (req, res) => {
-  res.render('main'); // 主界面
-});
-
 
 // 1. 新增 /main 路由，用于渲染模仿 Instagram 布局的主页
 app.get('/main', (req, res) => {
