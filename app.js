@@ -57,6 +57,10 @@ app.get('/bodyInfoForm', (req, res) => {
   res.render('bodyInfoForm');
 });
 
+app.get('/logout',(req,res)=>{
+	res.redirect('login');
+})
+
 
 async function start() {
   app.listen(PORT, () => {
