@@ -1,8 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE ejs>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>创建帐户</title>
+    <link href="css/register.css" rel="stylesheet" />
 </head>
-<body></body>
-</html>	
+<body>
+  <div class="topbar">
+    <div class="title"><h1>Register Account</h1></div>
+    </div>
+  </div>
+
+  <main class="container">
+ 
+
+    <form id="form" action="/register/step1" method="POST" novalidate>
+      <div class="field">
+        <label class="label" for="email">Email Address</label>
+        <input class="input" id="email" name="email" type="email" placeholder="name@example.com" required />
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <input class="input" id="password" name="password" type="password" minlength="10" placeholder="at least 10 characters." required />
+      </div>
+
+      <label class="agree">
+        <input type="checkbox" id="tos" required />
+        <span>I agree with HealthyPal <a href="#" target="_blank" rel="noopener">Terms and Conditions</a> and <a href="#" target="_blank" rel="noopener">Privacy Setting</a>。</span>
+      </label>
+
+      <p class="note">
+        The email address you used for login will be used to forward important account and security updates to your personal email. To receive these messages, please ensure that this connection remains in the "active" state.
+      </p>
+
+      <!-- 占位，实际提交由底部按钮触发 -->
+      <button type="submit" hidden>submit</button>
+    </form>
+  </main>
+
+  <div class="footer-bar">
+    <button class="fab-back" type="button" aria-label="返回" onclick="history.back()">
+      ←
+    </button>
+    <button id="nextBtn" class="cta" type="button">下一步</button>
+  </div>
+
+  <script src="js/register.js"></script>
+</body>
+</html>
