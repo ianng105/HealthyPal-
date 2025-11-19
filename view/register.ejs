@@ -1,9 +1,9 @@
-<!DOCTYPE ejs>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>创建帐户</title>
+  <title>Register</title>
     <link href="css/register.css" rel="stylesheet" />
 </head>
 <body>
@@ -15,7 +15,7 @@
   <main class="container">
  
 
-    <form id="form" action="/register/step1" method="POST" novalidate>
+    <form id="form"  method="POST" novalidate>
       <div class="field">
         <label class="label" for="email">Email Address</label>
         <input class="input" id="email" name="email" type="email" placeholder="name@example.com" required />
@@ -41,10 +41,10 @@
   </main>
 
   <div class="footer-bar">
-    <button class="fab-back" type="button" aria-label="返回" onclick="history.back()">
+    <button class="fab-back" type="button" aria-label="返回" onclick="location.href='/'">
       ←
     </button>
-    <button id="nextBtn" class="cta" type="button">下一步</button>
+    <button id="nextBtn" class="cta" type="button" >Next Step</button>
   </div>
 
   <script src="js/register.js"></script>
