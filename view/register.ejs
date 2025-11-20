@@ -15,7 +15,7 @@
   <main class="container">
  
 
-    <form id="form"  method="POST" novalidate>
+    <form id="form"  method="POST" action="/register">
       <div class="field">
         <label class="label" for="email">Email Address</label>
         <input class="input" id="email" name="email" type="email" placeholder="name@example.com" required />
@@ -35,17 +35,17 @@
         The email address you used for login will be used to forward important account and security updates to your personal email. To receive these messages, please ensure that this connection remains in the "active" state.
       </p>
 
-      <!-- 占位，实际提交由底部按钮触发 -->
-      <button type="submit" hidden>submit</button>
+
+     <div class="footer-bar">
+		<button class="fab-back" type="button" aria-label="返回" onclick="location.href='/'">
+		←
+		</button>
+		<input id="nextBtn" class="cta" type="submit" value="Next Step"/>
+  </div>
     </form>
   </main>
 
-  <div class="footer-bar">
-    <button class="fab-back" type="button" aria-label="返回" onclick="location.href='/'">
-      ←
-    </button>
-    <button id="nextBtn" class="cta" type="button" >Next Step</button>
-  </div>
+  
 
   <script src="js/register.js"></script>
 </body>
