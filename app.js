@@ -81,6 +81,7 @@ app.post('/register',async (req,res)=>{
     const email=req.body.email;
     console.log("email: ",email);
     const password = req.body.password;
+    const username = req.body.username;
     console.log("password: ",password);
     if (!email || !password){
     	return res.status(400).send('邮箱与密码必填');
@@ -89,17 +90,16 @@ app.post('/register',async (req,res)=>{
 
     // 检查邮箱是否已存在
     console.log("before find userbyusername");
-    const exists = await User.findUserByUsername(email);
+    const exists = await User.findUserByUsername(username);
     console.log("it works");
     if (exists){
     	res.render('/register');
     }
 	
    await User.createUser({
+      username,
       email,
       password,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     // 注册成功后跳转到 bodyInfoForm
