@@ -1,6 +1,8 @@
 const express=require("express");
 const path = require('path');
 const app=express();
+const{connectDB}=require('./model/mongo')
+const {createUser,findUserByUsername} = require('./model/user');
 const PORT = process.env.PORT || 8080;
 // 设置 EJS 视图引擎
 app.set('view engine', 'ejs');
@@ -8,6 +10,16 @@ app.set('views', path.join(__dirname, 'view'));
 
 // 托管静态文件（将你的 welcome.css / welcome.js / 以及 register_page.html, login.html 放到 public/ 下）
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));  // for form data (x-www-form-urlencoded)
+app.use(express.json());                          // if you ever send JSON (optional but good to have)
+
+// 启动时连接 MongoDB（失败直接退出）
+connectDB()
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => {
+    console.error('MongoDB connection failed:', err);
+    process.exit(1);
+  });
 
 // 根路由，渲染 welcome.ejs
 
@@ -59,8 +71,35 @@ app.get('/bodyInfoForm', (req, res) => {
 
 app.get('/logout',(req,res)=>{
 	res.redirect('login');
-})
+});
 
+// 注册提交
+
+app.post('/register',async (req,res)=>{
+  try {
+    const { email, password } = req.body || {};
+    if (!email || !password) return res.status(400).send('邮箱与密码必填');
+    if (password.length < 10) return res.status(400).send('密码至少 10 位');
+
+    // 检查邮箱是否已存在
+    const exists = await findUserByUsername(email);
+    if (exists) return res.status(409).send('邮箱已被注册');
+
+   await createUser({
+      email,
+      password,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    // 注册成功后跳转到 bodyInfoForm
+    return res.redirect(302, '/bodyInfoForm');
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send('服务器错误');
+  }
+	
+});
 
 async function start() {
   app.listen(PORT, () => {
