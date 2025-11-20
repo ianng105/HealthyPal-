@@ -1,59 +1,135 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HealthyPal-健身分享平台</title>
-  <!-- 引入 Font Awesome 图标库（免费版） -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="/css/main.css"rel="stylesheet"/>
-    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/css/main.css"/>
+  <style>
+    .content {
+      margin-left: 260px; /* 与侧边栏宽度一致 */
+      padding: 32px 24px;
+    }
+    .feed {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+    .post-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+    }
+    .username {
+      font-weight: 600;
+      color: #111827;
+      font-size: 14px;
+    }
+    .post-image {
+      width: 100%;
+      display: block;
+      max-height: 640px;
+      object-fit: cover;
+      background: #f3f4f6;
+    }
+    .post-body {
+      padding: 12px 16px 16px;
+    }
+    .caption {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .empty {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 24px;
+      text-align: center;
+      color: #6b7280;
+    }
+    .empty a {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .empty a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .content { margin-left: 0; padding: 16px; }
+    }
+  </style>
 </head>
 <body>
-  <!-- 左侧导航栏（Font Awesome 图标） -->
+  <!-- 左侧侧边栏 -->
   <aside class="sidebar">
     <h2>HealthyPal</h2>
     <nav>
-      <a href="/main">
-        <i class="fa-solid fa-house"></i> <!-- 主页图标（简洁房子） -->
+      <a class="active" href="/main">
+        <i class="fa-solid fa-house"></i>
         <span>Home</span>
       </a>
       <a href="/newPost">
-        <i class="fa-solid fa-upload"></i> <!-- 分享图标（上传箭头） -->
+        <i class="fa-solid fa-upload"></i>
         <span>Share</span>
       </a>
       <a href="/bodyInfo">
-        <i class="fa-solid fa-chart-line"></i> <!-- 身体数据图标（趋势图） -->
+        <i class="fa-solid fa-chart-line"></i>
         <span>Body Info</span>
       </a>
     </nav>
     <a href="/logout" class="logout">
-      <i class="fa-solid fa-right-from-bracket"></i> <!-- 登出图标（退出箭头） -->
+      <i class="fa-solid fa-right-from-bracket"></i>
       <span>Logout</span>
     </a>
   </aside>
 
-  <!-- 右侧帖子展示区 -->
-  <main class="posts-area">
-    <% if (posts && posts.length > 0) { %>
-      <% posts.forEach(post => { %>
-        <div class="post">
-          <div class="post-header">
-            <img src="<%= post.user.avatar %>" alt="用户头像" class="post-avatar">
-            <span class="post-username"><%= post.user.username %></span>
-          </div>
-          <div class="post-content">
-            <img src="<%= post.image %>" alt="健身分享" class="post-image">
-            <p class="post-caption"><%= post.caption %></p>
-          </div>
+  <!-- 右侧内容：帖子流 -->
+  <main class="content">
+    <section class="feed">
+      <% if (posts && posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+          <article class="post-card">
+            <header class="post-header">
+              <img class="avatar" src="<%= (post.user && post.user.avatar) ? post.user.avatar : '/images/avatar.jpg' %>" alt="avatar" />
+              <div class="username"><%= post.user && post.user.username ? post.user.username : '匿名用户' %></div>
+            </header>
+
+            <% if (post.image) { %>
+              <img class="post-image" src="<%= post.image %>" alt="post image" />
+            <% } %>
+
+            <div class="post-body">
+              <% if (post.caption) { %>
+                <div class="caption"><%= post.caption %></div>
+              <% } %>
+            </div>
+          </article>
+        <% }); %>
+      <% } else { %>
+        <div class="empty">
+          暂无健身分享，快去发布你的动态吧！<br/>
+          <a href="/newPost">立即发布</a>
         </div>
-      <% }); %>
-    <% } else { %>
-      <div style="text-align: center; padding: 50px; color: #999;">
-        <i class="fa-solid fa-image" style="font-size: 48px; margin-bottom: 20px;"></i>
-        <p>暂无健身分享，快去发布你的动态吧！</p>
-      </div>
-    <% } %>
+      <% } %>
+    </section>
   </main>
 </body>
 </html>

@@ -1,8 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HealthyPal - New Post</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/css/main.css"/>
+  <style>
+    .content {
+      margin-left: 260px; /* match your sidebar width */
+      padding: 32px 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 24px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .card-header i { color: #3b82f6; font-size: 20px; }
+    .card-title { font-size: 18px; font-weight: 600; color: #111827; }
+
+    form.new-post-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 20px;
+    }
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-size: 14px; color: #374151; }
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 14px;
+      color: #111827;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input[type="text"] { height: 40px; padding: 0 12px; }
+    textarea { padding: 12px; min-height: 120px; resize: vertical; }
+    input[type="file"] { padding: 10px 12px; }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    }
+    .hint { font-size: 12px; color: #6b7280; margin-top: -4px; }
+
+    /* Image preview */
+    .preview {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f9fafb;
+      border: 1px dashed #e5e7eb;
+      border-radius: 10px;
+    }
+    .preview img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .preview .meta { font-size: 13px; color: #374151; }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .btn {
+      height: 40px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-secondary { background: #f3f4f6; color: #374151; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn:active { transform: translateY(1px); }
+
+    @media (max-width: 900px) {
+      .content { margin-left: 0; padding: 16px; }
+      form.new-post-form { grid-template-columns: 1fr; }
+      .preview { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
 </head>
-<body></body>
-</html>	
+<body>
+  <!-- Left sidebar -->
+  <aside class="sidebar">
+    <h2>HealthyPal</h2>
+    <nav>
+      <a href="/main">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+      <a class="active" href="/newPost">
+        <i class="fa-solid fa-upload"></i>
+        <span>Share</span>
+      </a>
+      <a href="/bodyInfo">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Body Info</span>
+      </a>
+    </nav>
+    <a href="/logout" class="logout">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Logout</span>
+    </a>
+  </aside>
+
+  <!-- Right content -->
+  <main class="content">
+    <section class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <div class="card-title">Create a New Health Post</div>
+      </div>
+
+      <!-- Submit to /newPost with multipart/form-data to support image upload -->
+      <form class="new-post-form" action="/newPost" method="POST" enctype="multipart/form-data">
+        <!-- Username: optional. If you have auth, fill on server side. -->
+        <div class="field">
+          <label for="username">Nickname (optional)</label>
+          <input type="text" id="username" name="username" placeholder="e.g., FitBuddy"/>
+          <div class="hint">Leave empty to use a default or logged-in username.</div>
+        </div>
+
+        <!-- Image upload: required -->
+        <div class="field">
+          <label for="image">Image</label>
+          <input type="file" id="image" name="image" accept="image/*" required />
+          <div class="hint">Supports jpg/png/webp/gif. Suggested size ≥ 800×600.</div>
+        </div>
+
+        <!-- Text content -->
+        <div class="field full">
+          <label for="caption">What do you want to share?</label>
+          <textarea id="caption" name="caption" placeholder="Share your workout, meals, or health insights..." required></textarea>
+          <div class="hint">Example: Completed a 5km easy run with a high-protein, low-fat meal plan. Feeling great!</div>
+        </div>
+
+        <!-- Preview -->
+        <div id="preview" class="preview full">
+          <img id="previewImg" alt="Preview"/>
+          <div class="meta">
+            <div id="previewName"></div>
+            <div id="previewSize" class="hint"></div>
+          </div>
+        </div>
+
+        <div class="actions full">
+          <button type="button" class="btn btn-secondary" onclick="history.back()">Back</button>
+          <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Image preview
+    const input = document.getElementById('image');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('previewImg');
+    const previewName = document.getElementById('previewName');
+    const previewSize = document.getElementById('previewSize');
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) {
+        preview.style.display = 'none';
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      previewName.textContent = file.name;
+      previewSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+      preview.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
