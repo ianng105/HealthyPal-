@@ -60,6 +60,7 @@ module.exports = {
   findAllUsers: User.findAllUsers,
   findUserById: User.findUserById,
   findUserByUsername: User.findUserByUsername,
+  findUserByEmail: User.findUserByEmail,
   updateUser: User.updateUser,
   deleteUser: User.deleteUser
 };
