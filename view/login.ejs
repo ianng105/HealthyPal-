@@ -22,7 +22,8 @@
 
       <!-- 内容 -->
       <section class="content">
-        <div class="stack">
+        <!-- 添加 form 标签，指定提交地址和方法 -->
+        <form action="/login" method="POST" class="stack">
           <div class="field">
             <label for="email">Email address</label>
             <input class="input" id="email" name="email" type="email" placeholder="name@example.com" value="" autocomplete="username" required>
@@ -33,11 +34,12 @@
             <input class="input" id="password" name="password" type="password" placeholder="" autocomplete="current-password" required>
           </div>
 
-          <button class="btn btn-primary" id="loginBtn" onclick="location.href='/main'">Login</button>
+          <!-- 去掉 onclick 事件，type 设置为 submit -->
+          <button class="btn btn-primary" id="loginBtn" type="submit">Login</button>
 
           <div class="divider">OR</div>
 
-          <!-- 三方登录卡片 -->
+          <!-- 三方登录卡片保持不变 -->
           <div class="oauth-list">
             <button class="oauth-btn" onclick="oauth('facebook')">
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -49,7 +51,7 @@
           </div>
 
           <div class="legal">We will not disclose any information without your permission.</div>
-        </div>
+        </form>
       </section>
     </main>
   </div>
