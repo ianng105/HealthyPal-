@@ -36,6 +36,10 @@ app.get('/register', (req, res) => {
   res.render('register'); // 注册页
 });
 
+app.get('/newPost', (req, res) => {
+  res.render('newPost'); 
+});
+
 
 app.get('/main', async (req, res) => {
   try {
