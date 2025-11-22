@@ -104,22 +104,24 @@ app.get('/searchCalories',(req, res)=>{
 })
 
 app.get('/main', async (req, res) => {
-  if(!req.session.loggedIn){
-  	console.log("Go back to first page");
-  	res.redirect("login");
+  if (!req.session.loggedIn) {
+    console.log("Go back to first page");
+    return res.redirect("login");
   }
   try {
-    const rawPosts = await Post.findAllPosts(); // 从 MongoDB 读取
+    const rawPosts = await Post.findAllPosts();
 
-    // 映射成 main.ejs 期望的结构
     const posts = rawPosts.map(p => ({
       ...p,
-      user: { username: p.username || '匿名用户' }, // username -> user.username
+      user: { username: p.username || '匿名用户' },
       image: p.image || null,
       caption: typeof p.caption === 'string' ? p.caption : ''
     }));
 
-    res.render('main', { posts });
+    // 新增：把 session 中的用户名传给 EJS
+    const displayName = req.session.username || '用户';
+
+    res.render('main', { posts, displayName });
   } catch (err) {
     console.error('加载帖子失败:', err);
     res.status(500).send('服务器错误，无法加载帖子');
@@ -137,6 +139,8 @@ app.get('/bodyInfoForm', (req, res) => {
 app.get('/logout',(req,res)=>{
 	res.redirect('login');
 });
+
+
 
 // 注册提交
 
@@ -265,6 +269,110 @@ app.post('/login', async (req, res) => {
   }
 });
 
+
+
+// 工具：确保 session 列表存在
+function ensureEatenList(req) {
+  if (!req.session.eatenList) req.session.eatenList = [];
+  return req.session.eatenList;
+}
+
+// 计算总卡路里（以 number 存储的 calories 求和）
+function calcTotalCalories(list) {
+  return list.reduce((sum, item) => {
+    const cals = Number(item.calories) || 0;
+    const qty = Number(item.quantity) || 1; // 允许前端传份数，默认1
+    return sum + cals * qty;
+  }, 0);
+}
+
+
+
+// 将食物加入 session 列表
+app.post('/eaten/add', (req, res) => {
+  // 期望字段：food_name, calories, serving_description, [quantity]
+  // 注意：calories 由 searchFood 的接口结果传来，是每份的卡路里
+  const { food_name, calories, serving_description, quantity } = req.body;
+
+  if (!food_name || calories === undefined) {
+    return res.status(400).send('缺少必要字段');
+  }
+
+  const list = ensureEatenList(req);
+
+  // 入列的最小结构
+  list.push({
+    id: Date.now().toString(),       // 简单本地ID便于删除
+    food_name: String(food_name),
+    calories: Number(calories),      // 每份卡路里
+    serving_description: serving_description ? String(serving_description) : '',
+    quantity: quantity ? Number(quantity) : 1
+  });
+
+  req.session.eatenList = list;
+  // 根据需要选择返回：重定向回搜索页，或返回 JSON
+  // 这里使用重定向，如果有 query 可回传
+  return res.redirect('back');
+});
+
+// 工具：确保 session 列表存在
+function ensureEatenList(req) {
+  if (!req.session.eatenList) req.session.eatenList = [];
+  return req.session.eatenList;
+}
+
+// 计算总卡路里（以 number 存储的 calories 求和）
+function calcTotalCalories(list) {
+  return list.reduce((sum, item) => {
+    const cals = Number(item.calories) || 0;
+    const qty = Number(item.quantity) || 1; // 允许前端传份数，默认1
+    return sum + cals * qty;
+  }, 0);
+}
+
+// 将食物加入 session 列表
+app.post('/eaten/add', (req, res) => {
+  // 期望字段：food_name, calories, serving_description, [quantity]
+  // 注意：calories 由 searchFood 的接口结果传来，是每份的卡路里
+  const { food_name, calories, serving_description, quantity } = req.body;
+
+  if (!food_name || calories === undefined) {
+    return res.status(400).send('缺少必要字段');
+  }
+
+  const list = ensureEatenList(req);
+
+  // 入列的最小结构
+  list.push({
+    id: Date.now().toString(),       // 简单本地ID便于删除
+    food_name: String(food_name),
+    calories: Number(calories),      // 每份卡路里
+    serving_description: serving_description ? String(serving_description) : '',
+    quantity: quantity ? Number(quantity) : 1
+  });
+
+  req.session.eatenList = list;
+  // 根据需要选择返回：重定向回搜索页，或返回 JSON
+  // 这里使用重定向，如果有 query 可回传
+  return res.redirect('back');
+});
+
+// 从 session 列表移除一项（可选）
+app.post('/eaten/remove', (req, res) => {
+  const { id } = req.body;
+  const list = ensureEatenList(req);
+  const idx = list.findIndex(x => x.id === id);
+  if (idx >= 0) list.splice(idx, 1);
+  return res.redirect('back');
+});
+
+// 查看当前 session 中的已吃列表（便于调试/展示）
+app.get('/eaten', (req, res) => {
+  const list = ensureEatenList(req);
+  const totalCalories = calcTotalCalories(list);
+  // 你也可以改为 res.render('eaten', { list, totalCalories });
+  res.json({ list, totalCalories });
+});
 
 //end 
 
