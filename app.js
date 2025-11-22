@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));  // for form data (x-www-form-urlencoded)
 app.use(express.json());                          // if you ever send JSON (optional but good to have)
 
-// 启动时连接 MongoDB（失败直接退出）
+//=======================connect mongoDB=================//
 connectDB()
   .then(() => console.log('MongoDB connected'))
   .catch((err) => {
@@ -43,7 +43,7 @@ app.use(cors({
   origin: 'http://localhost:8080', // 前端页面的地址（与实际端口一致）
   credentials: true, // 允许携带Cookie
 }));
-// 新增：配置session
+//==================session==========================//
 app.use(session({
   secret: 'your-secret-key-here', // 生产环境应使用环境变量
   resave: false,
@@ -53,28 +53,7 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 1天有效期
   }
 }));
-// 根路由，渲染 welcome.ejs
-
-app.get('/', (req, res) => {
-  res.render('welcome'); // 首页
-});
-
-app.get('/login', (req, res) => {
-  res.render('login'); // 登录页
-});
-
-app.get('/register', (req, res) => {
-  res.render('register'); // 注册页
-});
-
-app.get('/searchFood',(req,res)=>{
-	res.render('searchFood.ejs',{foodarray:[]});
-})
-
-app.get('/newPost', (req, res) => {
-  res.render('newPost'); 
-});
-
+//==================search from fatSecret=========================//
 app.get('/searchCalories',(req, res)=>{
 	const apiUrl = `https://platform.fatsecret.com/rest/foods/search/v4?search_expression=${req.query.foodInput}&format=json&include_sub_categories=true&flag_default_serving=true&include_food_attributes=true&include_food_images=false&max_results=10&language=en&region=US&page_number=0`;
 
@@ -127,7 +106,7 @@ app.get('/main', async (req, res) => {
     res.status(500).send('服务器错误，无法加载帖子');
   }
 });
-
+//===================route=============================//
 app.get('/bodyInfo', (req, res) => {
   res.render('bodyInfo');
 });
@@ -140,9 +119,28 @@ app.get('/logout',(req,res)=>{
 	res.redirect('login');
 });
 
+app.get('/', (req, res) => {
+  res.render('welcome'); // 首页
+});
+
+app.get('/login', (req, res) => {
+  res.render('login'); // 登录页
+});
+
+app.get('/register', (req, res) => {
+  res.render('register'); // 注册页
+});
+
+app.get('/searchFood',(req,res)=>{
+	res.render('searchFood.ejs',{foodarray:[]});
+})
+
+app.get('/newPost', (req, res) => {
+  res.render('newPost'); 
+});
 
 
-// 注册提交
+//=========================register=======================//
 
 app.post('/register',async (req,res)=>{
 	
@@ -185,7 +183,7 @@ app.post('/register',async (req,res)=>{
 	
 });
 
-//new part
+//==================submit from body info form to db=====================//
 app.post('/submit-body-info', async (req, res) => {
   // 从 cookie 拿到刚注册的用户名（如果你以后要做登录系统，这里会改成 req.session.user）
   const username = req.session.username;
@@ -220,6 +218,7 @@ app.post('/submit-body-info', async (req, res) => {
   }
 });
 
+//================login==================//
 app.post('/login', async (req, res) => {
   console.log('🔵 收到登录请求 (表单提交)');
 
@@ -270,7 +269,7 @@ app.post('/login', async (req, res) => {
 });
 
 
-
+// =================add to list=================//
 // 工具：确保 session 列表存在
 function ensureEatenList(req) {
   if (!req.session.eatenList) req.session.eatenList = [];
@@ -330,10 +329,9 @@ function calcTotalCalories(list) {
   }, 0);
 }
 
-// 将食物加入 session 列表
+
 app.post('/eaten/add', (req, res) => {
-  // 期望字段：food_name, calories, serving_description, [quantity]
-  // 注意：calories 由 searchFood 的接口结果传来，是每份的卡路里
+
   const { food_name, calories, serving_description, quantity } = req.body;
 
   if (!food_name || calories === undefined) {
@@ -342,22 +340,18 @@ app.post('/eaten/add', (req, res) => {
 
   const list = ensureEatenList(req);
 
-  // 入列的最小结构
   list.push({
-    id: Date.now().toString(),       // 简单本地ID便于删除
+    id: Date.now().toString(),      
     food_name: String(food_name),
-    calories: Number(calories),      // 每份卡路里
+    calories: Number(calories),      
     serving_description: serving_description ? String(serving_description) : '',
     quantity: quantity ? Number(quantity) : 1
   });
 
   req.session.eatenList = list;
-  // 根据需要选择返回：重定向回搜索页，或返回 JSON
-  // 这里使用重定向，如果有 query 可回传
   return res.redirect('back');
 });
 
-// 从 session 列表移除一项（可选）
 app.post('/eaten/remove', (req, res) => {
   const { id } = req.body;
   const list = ensureEatenList(req);
@@ -375,6 +369,10 @@ app.get('/eaten', (req, res) => {
 });
 
 
+//================Restful api=================//
+
+
+//================listen======================//
 async function start() {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
