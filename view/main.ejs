@@ -71,27 +71,60 @@
       font-weight: 600;
     }
     .empty a:hover { text-decoration: underline; }
-    .brand{
-  font-weight: 800;
-  font-size: 22px;
-  letter-spacing: 0.2px;
-}
-.brand b{ color:#10b981; }
+
+    /* 右上角圆形按钮 */
+    .floating-profile-btn {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(59,130,246,0.35);
+      cursor: pointer;
+      text-decoration: none;
+      z-index: 1000;
+      transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+    }
+    .floating-profile-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(59,130,246,0.45);
+      background: #2563eb;
+    }
+    .floating-profile-btn:active { transform: translateY(0); }
+    .floating-profile-btn i { font-size: 22px; }
 
     @media (max-width: 900px) {
       .content { margin-left: 0; padding: 16px; }
+      .floating-profile-btn {
+        right: 14px;
+        top: 14px;
+        width: 52px;
+        height: 52px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- 右上角圆形按钮：跳转到 /userProfile -->
+  <a href="/userProfile" class="floating-profile-btn" title="Profile">
+    <i class="fa-solid fa-user"></i>
+  </a>
+
   <!-- 左侧侧边栏 -->
   <aside class="sidebar">
+    <h2>HealthyPal</h2>
     <nav>
       <a class="active" href="/main">
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
       </a>
-      <a href="/searchFood">
+      <a href="/newPost">
         <i class="fa-solid fa-upload"></i>
         <span>Share</span>
       </a>
@@ -106,15 +139,8 @@
     </a>
   </aside>
 
-  <!-- 右侧内容：帖子流 -->
+  <!-- 右侧内容：帖子流（依据你提供的模板结构渲染） -->
   <main class="content">
-      <div class="brand">
-  <% if (typeof displayName !== 'undefined' && displayName) { %>
-    Hi <%= displayName %> !
-  <% } else { %>
-    HealthyPal
-  <% } %>
-</div>
     <section class="feed">
       <% if (posts && posts.length > 0) { %>
         <% posts.forEach(post => { %>
@@ -138,12 +164,11 @@
       <% } else { %>
         <div class="empty">
           暂无健身分享，快去发布你的动态吧！<br/>
-          <a href="/searchFood">立即发布</a>
+          <a href="/newPost">立即发布</a>
         </div>
       <% } %>
     </section>
   </main>
 </body>
 </html>
-
 
