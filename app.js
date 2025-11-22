@@ -144,10 +144,10 @@ app.get('/newPost', (req, res) => {
 });
 
 app.get('/userProfile', (req, res) => {
-  const username = req.session && req.session.username ? req.session.username : '匿名用户';
+  // 这里传入一个可选的占位 user，便于 EJS 展示
   res.render('userProfile', {
     user: {
-      username,
+      username: '匿名用户',
       avatar: '/images/avatar.jpg',
       plan: 'Keep a balanced workout: 3x strength + 2x cardio per week'
     }
@@ -393,7 +393,60 @@ app.get('/eaten', (req, res) => {
 
 
 //================Restful api=================//
+app.get('/api/posts/:username',async(req,res)=>{
+	const result= await Post.findPostByUsername(req.params.username);
+	for(let i=0;i<result.length;i++){
+		console.log("This is the result ",result[i]);
+	}
+	res.status(200).type("json").json(result);
+});
 
+
+app.post('/api/posts',async(req,res)=>{
+		const un= await User.findUserByUsername(req.body.username);
+		if(!un){
+			res.status(404).json({error:"User not found"});
+		}
+		if(req.body.password!=un.password){
+			res.status(404).json({error:"incorrect password"});
+		}
+		postData={
+			username:un.username,
+			image:req.body.image,
+			calories:Number(req.body.calories),
+			caption:req.body.caption,
+			date:new Date()
+			
+		};
+		const result= await Post.createPost(postData);
+		res.status(200).type("json").json(result);
+
+})
+
+
+app.put('/api/posts/:post_id',async(req,res)=>{
+	const un= await User.findUserByUsername(req.body.username);
+	if(!un){
+		res.status(404).json({error:"User not found"});
+	}
+	if(req.body.password!=un.password){
+		res.status(404).json({error:"incorrect password"});
+	}
+	const updateData={
+		image:req.body.image,
+		calories:req.body.calories,
+		caption:req.body.caption,
+	};
+	
+	await Post.updatePost(req.params.post_id,updateData);
+	const result = await  Post.findPostById(req.params.post_id);
+	res.status(200).type("json").json(result);
+})
+
+app.delete("/api/posts/:post_id",async(req,res)=>{
+	Post.deletePost(req.params.post_id);
+	res.status(200).json({message:"Success"});
+})
 
 //================listen======================//
 async function start() {
