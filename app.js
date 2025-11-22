@@ -374,7 +374,6 @@ app.get('/eaten', (req, res) => {
   res.json({ list, totalCalories });
 });
 
-//end 
 
 async function start() {
   app.listen(PORT, () => {
