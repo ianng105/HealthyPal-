@@ -106,11 +106,6 @@
         <a href="/main" class="btn">Home</a>
         
       </div>
-      <div class="nav-right">
-        <form action="/logout" method="POST" style="margin:0">
-          <button type="submit" class="btn">Logout</button>
-        </form>
-      </div>
     </nav>
 
     <!-- 头像置中放大 -->
@@ -118,7 +113,7 @@
       <!-- 如果你有头像 URL，可用 user.avatarUrl；没有就用一个占位符字母头像或本地默认图 -->
       <img class="avatar" src="<%= (typeof user !== 'undefined' && user.avatarUrl) ? user.avatarUrl : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23e2e8f0%22/><text x=%2250%25%22 y=%2252%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2256%22 fill=%22%2364758b%22 font-family=%22sans-serif%22>%F0%9F%91%A4</text></svg>' %>" alt="avatar"/>
       <div class="username"><%= (typeof user !== 'undefined' && user.username) ? user.username : '匿名用户' %></div>
-      <div class="plan">Plan: <%= (typeof user !== 'undefined' && user.plan) ? user.plan : 'No plan set yet' %></div>
+     
     </section>
 
     <!-- 主体：信息与日历 -->
@@ -126,12 +121,8 @@
       <section class="card">
         <h3>Profile</h3>
         <p><strong>Username:</strong> <%= (typeof user !== 'undefined' && user.username) ? user.username : '匿名用户' %></p>
-        <p><strong>Plan:</strong> <%= (typeof user !== 'undefined' && user.plan) ? user.plan : 'No plan set yet' %></p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-          <form action="/delete-account" method="POST" onsubmit="return confirm('确定要删除账户吗？此操作不可恢复。')" style="margin:0">
-            <button class="btn danger" type="submit">Delete Account</button>
-          </form>
-        </div>
+     
+        
       </section>
 
       <section class="card calendar">
