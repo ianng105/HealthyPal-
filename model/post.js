@@ -34,6 +34,17 @@ class Post{
   
 }
 
+  static async findPostByUsername(Username) {
+  const collection = await Post.getCollection();
+  const result =await collection.find({ username: Username }).toArray();
+  for(let i=0;i<result.length;i++){
+		console.log("This is the result ",result[i]);
+	}
+    return result ;
+ 
+  
+}
+
 // 更新帖子
   static async updatePost(id, updateData) {
   const collection = await Post.getCollection();
@@ -59,6 +70,7 @@ module.exports = {
   createPost:Post.createPost,
   findAllPosts:Post.findAllPosts,
   findPostById:Post.findPostById,
+  findPostByUsername:Post.findPostByUsername,
   updatePost:Post.updatePost,
   deletePost:Post.deletePost,
 };
