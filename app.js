@@ -19,8 +19,8 @@ const oa = new OAuth(
   consumerKey,
   consumerSecret,
   '1.0', // OAuth version
-  null, // Callback URL 
-  'HMAC-SHA1' // Signature method 
+  null, // Callback URL (null if not using 3-legged OAuth)
+  'HMAC-SHA1' // Signature method (common for OAuth 1.0; check API docs)
 );
 
 // 设置 EJS 视图引擎
@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));  // for form data (x-www-form-urlencoded)
 app.use(express.json());                          // if you ever send JSON (optional but good to have)
 
+// 启动时连接 MongoDB（失败直接退出）
 //=======================connect mongoDB=================//
 connectDB()
   .then(() => console.log('MongoDB connected'))
@@ -43,6 +44,7 @@ app.use(cors({
   origin: 'http://localhost:8080', // 前端页面的地址（与实际端口一致）
   credentials: true, // 允许携带Cookie
 }));
+// 新增：配置session
 //==================session==========================//
 app.use(session({
   secret: 'your-secret-key-here', // 生产环境应使用环境变量
@@ -53,6 +55,28 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 1天有效期
   }
 }));
+// 根路由，渲染 welcome.ejs
+
+app.get('/', (req, res) => {
+  res.render('welcome'); // 首页
+});
+
+app.get('/login', (req, res) => {
+  res.render('login'); // 登录页
+});
+
+app.get('/register', (req, res) => {
+  res.render('register'); // 注册页
+});
+
+app.get('/searchFood',(req,res)=>{
+	res.render('searchFood',{foodarray:[]});
+})
+
+app.get('/newPost', (req, res) => {
+  res.render('newPost'); 
+});
+
 //==================search from fatSecret=========================//
 app.get('/searchCalories',(req, res)=>{
 	const apiUrl = `https://platform.fatsecret.com/rest/foods/search/v4?search_expression=${req.query.foodInput}&format=json&include_sub_categories=true&flag_default_serving=true&include_food_attributes=true&include_food_images=false&max_results=10&language=en&region=US&page_number=0`;
@@ -75,13 +99,13 @@ app.get('/searchCalories',(req, res)=>{
 	      }
 	      */
 	      res.render('searchFood',{foodarray:foodArray});
-	      
-	      
+
+
 	    }
   	);
-  	
+
 })
-//====================display posts in main page=====================//
+
 app.get('/main', async (req, res) => {
   if (!req.session.loggedIn) {
     console.log("Go back to first page");
@@ -106,6 +130,7 @@ app.get('/main', async (req, res) => {
     res.status(500).send('服务器错误，无法加载帖子');
   }
 });
+
 //===================route=============================//
 app.get('/bodyInfo', (req, res) => {
   res.render('bodyInfo');
@@ -140,10 +165,11 @@ app.get('/newPost', (req, res) => {
 });
 
 
+// 注册提交
 //=========================register=======================//
 
 app.post('/register',async (req,res)=>{
-	
+
   try {
     const email=req.body.email;
     console.log("email: ",email);
@@ -163,7 +189,7 @@ app.post('/register',async (req,res)=>{
     if (exists){
     	res.resirect('/login');
     }
-	
+
    await User.createUser({
       username,
       email,
@@ -180,9 +206,10 @@ app.post('/register',async (req,res)=>{
     console.error("This is the error message ",e);
     res.redirect('/login');
   }
-	
+
 });
 
+//new part
 //==================submit from body info form to db=====================//
 app.post('/submit-body-info', async (req, res) => {
   // 从 cookie 拿到刚注册的用户名（如果你以后要做登录系统，这里会改成 req.session.user）
@@ -191,7 +218,7 @@ app.post('/submit-body-info', async (req, res) => {
   if (!username) {
     return res.status(400).send('无法识别用户，请重新注册');
   }
-	
+
   const user = await User.findUserByUsername(username);
   console.log("user_id: ",user._id);
   const bodyInfo = {
@@ -226,30 +253,30 @@ app.post('/login', async (req, res) => {
     // 1. 获取表单数据 (express.urlencoded 中间件会解析)
     const { email, password } = req.body;
     console.log('🔵 请求体内容:', req.body);
-    
+
     // 2. 验证输入
     if (!email || !password) {
       console.log('🔴 错误：邮箱或密码为空');
       // 可以使用 flash message 显示错误，这里为简化，直接重定向回登录页
       return res.redirect('/login?error=empty');
     }
-    
+
     // 3. 查找用户
     console.log(`🔵 正在数据库中查找用户: ${email}`);
     const user = await User.findUserByEmail(email);
-    
+
     if (!user) {
       console.log(`🔴 错误：未找到用户 ${email}`);
       return res.redirect('/login?error=invalid');
     }
-    
+
     // 4. 验证密码
     console.log('🔵 找到用户，正在验证密码...');
     if (user.password !== password) {
       console.log('🔴 错误：密码不匹配');
       return res.redirect('/login?error=invalid');
     }
-    
+
     // 5. 登录成功，设置会话
     req.session.userId = user._id;
     req.session.email = user.email;
@@ -257,7 +284,7 @@ app.post('/login', async (req, res) => {
     console.log(req.session.username);
     req.session.loggedIn = true;
     console.log(`🟢 用户 ${req.session.username} 登录成功，会话已创建`);
-    
+
     // 6. 重定向到主页
     res.redirect('/main');
 
@@ -267,6 +294,7 @@ app.post('/login', async (req, res) => {
     res.redirect('/login?error=server');
   }
 });
+
 
 
 // =================add to list=================//
@@ -329,8 +357,11 @@ function calcTotalCalories(list) {
   }, 0);
 }
 
+// 将食物加入 session 列表
 
 app.post('/eaten/add', (req, res) => {
+  // 期望字段：food_name, calories, serving_description, [quantity]
+  // 注意：calories 由 searchFood 的接口结果传来，是每份的卡路里
 
   const { food_name, calories, serving_description, quantity } = req.body;
 
@@ -340,18 +371,24 @@ app.post('/eaten/add', (req, res) => {
 
   const list = ensureEatenList(req);
 
+  // 入列的最小结构
   list.push({
+    id: Date.now().toString(),       // 简单本地ID便于删除
     id: Date.now().toString(),      
     food_name: String(food_name),
+    calories: Number(calories),      // 每份卡路里
     calories: Number(calories),      
     serving_description: serving_description ? String(serving_description) : '',
     quantity: quantity ? Number(quantity) : 1
   });
 
   req.session.eatenList = list;
+  // 根据需要选择返回：重定向回搜索页，或返回 JSON
+  // 这里使用重定向，如果有 query 可回传
   return res.redirect('back');
 });
 
+// 从 session 列表移除一项（可选）
 app.post('/eaten/remove', (req, res) => {
   const { id } = req.body;
   const list = ensureEatenList(req);
@@ -370,16 +407,7 @@ app.get('/eaten', (req, res) => {
 
 
 //================Restful api=================//
-app.get('/api/posts/username/:username',async(req,res){
-	const result= await Post.findPostByUsername(req.params.username);
-	for(let i=0;i<result.length;i++){
-		console.log("This is the result ",result[i]);
-	}
-	res.status(200).type("json").json(result).end();
-});
-app.post();
-app.put();
-app.delete();
+
 
 //================listen======================//
 async function start() {
@@ -389,4 +417,3 @@ async function start() {
 }
 
 start();
-
