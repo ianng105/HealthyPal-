@@ -32,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));  // for form data (x-www-form-urlencoded)
 app.use(express.json());                          // if you ever send JSON (optional but good to have)
 
-// 启动时连接 MongoDB（失败直接退出）
 //=======================connect mongoDB=================//
 connectDB()
   .then(() => console.log('MongoDB connected'))
@@ -44,7 +43,7 @@ app.use(cors({
   origin: 'http://localhost:8080', // 前端页面的地址（与实际端口一致）
   credentials: true, // 允许携带Cookie
 }));
-// 新增：配置session
+
 //==================session==========================//
 app.use(session({
   secret: 'your-secret-key-here', // 生产环境应使用环境变量
@@ -55,27 +54,6 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000 // 1天有效期
   }
 }));
-// 根路由，渲染 welcome.ejs
-
-app.get('/', (req, res) => {
-  res.render('welcome'); // 首页
-});
-
-app.get('/login', (req, res) => {
-  res.render('login'); // 登录页
-});
-
-app.get('/register', (req, res) => {
-  res.render('register'); // 注册页
-});
-
-app.get('/searchFood',(req,res)=>{
-	res.render('searchFood',{foodarray:[]});
-})
-
-app.get('/newPost', (req, res) => {
-  res.render('newPost'); 
-});
 
 //==================search from fatSecret=========================//
 app.get('/searchCalories',(req, res)=>{
@@ -99,13 +77,14 @@ app.get('/searchCalories',(req, res)=>{
 	      }
 	      */
 	      res.render('searchFood',{foodarray:foodArray});
-
-
+	      
+	      
 	    }
   	);
-
+  	
 })
 
+//====================display posts in main page=====================//
 app.get('/main', async (req, res) => {
   if (!req.session.loggedIn) {
     console.log("Go back to first page");
@@ -164,12 +143,21 @@ app.get('/newPost', (req, res) => {
   res.render('newPost'); 
 });
 
+app.get('/userProfile', (req, res) => {
+  // 这里传入一个可选的占位 user，便于 EJS 展示
+  res.render('userProfile', {
+    user: {
+      username: '匿名用户',
+      avatar: '/images/avatar.jpg',
+      plan: 'Keep a balanced workout: 3x strength + 2x cardio per week'
+    }
+  });
+});
 
-// 注册提交
 //=========================register=======================//
 
 app.post('/register',async (req,res)=>{
-
+  console.log("register function start");
   try {
     const email=req.body.email;
     console.log("email: ",email);
@@ -204,12 +192,13 @@ app.post('/register',async (req,res)=>{
     return res.redirect(302, '/bodyInfoForm');
   } catch (e) {
     console.error("This is the error message ",e);
-    res.redirect('/login');
+    res.render('/register');
   }
 
 });
 
 //new part
+
 //==================submit from body info form to db=====================//
 app.post('/submit-body-info', async (req, res) => {
   // 从 cookie 拿到刚注册的用户名（如果你以后要做登录系统，这里会改成 req.session.user）
@@ -357,11 +346,10 @@ function calcTotalCalories(list) {
   }, 0);
 }
 
-// 将食物加入 session 列表
+
 
 app.post('/eaten/add', (req, res) => {
-  // 期望字段：food_name, calories, serving_description, [quantity]
-  // 注意：calories 由 searchFood 的接口结果传来，是每份的卡路里
+
 
   const { food_name, calories, serving_description, quantity } = req.body;
 
@@ -371,24 +359,22 @@ app.post('/eaten/add', (req, res) => {
 
   const list = ensureEatenList(req);
 
-  // 入列的最小结构
+  
   list.push({
-    id: Date.now().toString(),       // 简单本地ID便于删除
+    id: Date.now().toString(),       
     id: Date.now().toString(),      
     food_name: String(food_name),
-    calories: Number(calories),      // 每份卡路里
+    calories: Number(calories),      
     calories: Number(calories),      
     serving_description: serving_description ? String(serving_description) : '',
     quantity: quantity ? Number(quantity) : 1
   });
 
   req.session.eatenList = list;
-  // 根据需要选择返回：重定向回搜索页，或返回 JSON
-  // 这里使用重定向，如果有 query 可回传
   return res.redirect('back');
 });
 
-// 从 session 列表移除一项（可选）
+
 app.post('/eaten/remove', (req, res) => {
   const { id } = req.body;
   const list = ensureEatenList(req);
@@ -402,7 +388,7 @@ app.get('/eaten', (req, res) => {
   const list = ensureEatenList(req);
   const totalCalories = calcTotalCalories(list);
   // 你也可以改为 res.render('eaten', { list, totalCalories });
-  res.json({ list, totalCalories });
+  res.render(eaten,{ list, totalCalories });
 });
 
 
