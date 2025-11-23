@@ -1,0 +1,52 @@
+// 获取弹窗元素
+  const modal = document.getElementById('notificationModal');
+  const modalMessage = document.getElementById('modalMessage');
+  const modalOk = document.getElementById('modalOk');
+  let currentForm = null;
+
+  // 为所有添加表单添加提交事件监听
+  document.querySelectorAll('.add-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      // 获取数量输入值
+      const quantityInput = this.querySelector('input[name="quantity"]');
+      const quantity = parseInt(quantityInput.value);
+      const foodName = this.querySelector('input[name="food_name"]').value;
+      
+      // 验证数量是否大于0
+      if (quantity <= 0) {
+        alert('please submit more than 0');
+        e.preventDefault();
+        return;
+      }
+      
+      // 阻止默认提交
+      e.preventDefault();
+      
+      // 设置弹窗消息
+      modalMessage.textContent = `${quantity} serving(s) of ${foodName} has been added to the eaten list`;
+      
+      // 保存当前表单引用
+      currentForm = this;
+      
+      // 显示弹窗
+      modal.style.display = 'flex';
+    });
+  });
+
+  // 点击确定按钮提交表单
+  modalOk.addEventListener('click', function() {
+    // 隐藏弹窗
+    modal.style.display = 'none';
+    
+    // 提交表单
+    if (currentForm) {
+      currentForm.submit();
+    }
+  });
+
+  // 点击弹窗外部关闭弹窗
+  window.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
