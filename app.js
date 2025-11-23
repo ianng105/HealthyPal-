@@ -217,10 +217,6 @@ app.post('/submit-body-info', async (req, res) => {
     weight: Number(req.body.weight),
     gender: req.body.gender,
     birthday: req.body.birthday ? new Date(req.body.birthday) : null,
-    bodyFat: req.body.bodyFat ? Number(req.body.bodyFat) : null,
-    waist: req.body.waist ? Number(req.body.waist) : null,
-    hip: req.body.hip ? Number(req.body.hip) : null,
-    neck: req.body.neck ? Number(req.body.neck) : null,
     activity: req.body.activity || null,
     goal: req.body.goal || null,
   };
