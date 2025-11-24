@@ -103,7 +103,15 @@ app.get('/main', async (req, res) => {
     // 新增：把 session 中的用户名传给 EJS
     const displayName = req.session.username || '用户';
 
-    res.render('main', { posts, displayName });
+    // 新增：把已吃列表与总卡路里传入 main.ejs
+    const eatenList = Array.isArray(req.session.eatenList) ? req.session.eatenList : [];
+    const totalCalories = eatenList.reduce((sum, it) => {
+      const c = Number(it.calories) || 0;
+      const q = Number(it.quantity) || 1;
+      return sum + c * q;
+    }, 0);
+
+    res.render('main', { posts, displayName,eatenList,totalCalories });
   } catch (err) {
     console.error('加载帖子失败:', err);
     res.status(500).send('服务器错误，无法加载帖子');
