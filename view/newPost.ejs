@@ -137,10 +137,9 @@
       </div>
 
       <!-- Submit to /newPost with multipart/form-data to support image upload -->
-      <form class="new-post-form" action="/newPost" method="POST" enctype="multipart/form-data">
-        <!-- Username: optional. If you have auth, fill on server side. -->
+      <form class="new-post-form" id="postForm" action="/newPost" method="POST" ">
         
-
+        <!-- Username: optional. If you have auth, fill on server side. -->
         <!-- Image upload: required -->
         <div class="field">
           <label for="image">Image</label>
@@ -151,7 +150,7 @@
         <!-- Text content -->
         <div class="field full">
           <label for="caption">What do you want to share?</label>
-          <textarea for="caption" id="caption" name="caption" placeholder="Share your workout, meals, or health insights..." ></textarea>
+          <textarea id="caption" name="caption" form="postForm" placeholder="Share your workout, meals, or health insights..." ></textarea>
           <div class="hint">Example: Completed a 5km easy run with a high-protein, low-fat meal plan. Feeling great!</div>
         </div>
         
