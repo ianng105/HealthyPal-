@@ -4,245 +4,143 @@
   <meta charset="utf-8">
   <title>what have you eat</title>
   <style>
-    .food-item { border: 1px solid #ddd; padding: 10px; margin: 8px 0; border-radius: 6px; }
-    .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .actions { margin-top: 8px; display: flex; gap: 8px; align-items: center; }
-    input[type="number"] { width: 80px; }
-    /* 弹窗样式 */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1001;
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      width: 300px;
-    }
-    .modal button {
-      margin-top: 15px;
-      padding: 8px 16px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-     .title-line{
-      display:flex;
-      align-items:center;
-      gap:12px;           /* 控制标题与按钮的间距 */
-      margin:0 0 16px;
-      flex-wrap:wrap;     /* 小屏自动换行 */
-    }
-       .title{
-      display:inline-flex; align-items:center; gap:10px;
-      font-size:20px; font-weight:700; margin:0;
-    }
-    .title .icon{ width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; color:var(--primary); }
-    .divider{
-      height:1px;background:#eef0f3;margin:16px 0;
-    }
-    .top-actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
-      margin-top:8px;
-    } 
     :root{
-      --primary:#3b82f6;      /* 主按钮蓝色 */
-      --primary-dark:#2563eb;
-      --secondary:#e5e7eb;    /* 次按钮浅灰 */
-      --text:#111827;
-      --muted:#6b7280;
-      --bg:#f7f7fb;
-      --card:#ffffff;
-      --radius:14px;
-      --shadow:0 10px 25px rgba(0,0,0,.06);
-      --ring:0 0 0 3px rgba(59,130,246,.25);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC","Microsoft YaHei", "Noto Sans", sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    .container{
-      max-width:980px;
-      margin:32px auto;
-      padding:0 16px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:24px;
-    }
-     .btn{
-      appearance:none; -webkit-appearance:none;
-      border:0;
-      padding:10px 16px;
-      border-radius:10px;
-      font-weight:600;
-      font-size:14px;
-      cursor:pointer;
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:8px;
-      transition: transform .02s ease, box-shadow .2s, background .2s, color .2s;
-      user-select:none;
-      white-space:nowrap;
-    }
-    .btn:active{ transform: translateY(1px); }
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      box-shadow: 0 6px 14px rgba(59,130,246,.25);
-    }
-    .btn-primary:hover{ background:var(--primary-dark); }
-    .btn-secondary{
-      background:var(--secondary);
-      color:#111827;
-    }
-    .btn-secondary:hover{
-      background:#dfe3e8;
-    }
-    .food-item{
-      border:1px solid #eef0f3;
-      border-radius:12px;
-      padding:14px;
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:10px;
-      align-items:center;
-      background:#fff;
-    }
-    .food-info{
-      min-width:0;
-    }
-    .food-name{
-      font-weight:600;
-      margin:0 0 4px;
-      line-height:1.2;
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-    }
-    .food-meta{
-      color:var(--muted);
-      font-size:13px;
-      display:flex; gap:14px; flex-wrap:wrap;
-    }
-     .qty{
-      width:80px;
-      border:1px solid #e5e7eb;
-      border-radius:10px;
-      padding:8px 10px;
-      font-size:14px;
-      text-align:center;
-    }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC","Microsoft YaHei", "Noto Sans", sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:24px;
-    }
-     .divider{
-      height:1px;background:#eef0f3;margin:16px 0;
-    }
-     .search-row{
-      display:flex; gap:12px; flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-    input[type="text"]{
-      flex:1 1 240px;
-      border:1px solid #e5e7eb;
-      border-radius:10px;
-      padding:12px 14px;
-      outline:none;
-      font-size:14px;
-      background:#fff;
-      transition:border .2s, box-shadow .2s;
-    }
-    input[type="text"]::placeholder{color:#9ca3af}
-    input[type="text"]:focus{
-      border-color:var(--primary);
-      box-shadow:var(--ring);
-    }
+    --bg:#f7f8fb; --card:#fff; --line:#eef0f3; --text:#111827; --muted:#6b7280;
+    --brand:#3b82f6; --brand-dark:#2563eb; --danger:#ef4444;
+  }
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Microsoft YaHei",sans-serif;}
 
+  /* 页面整体三列：左侧记录饮食 rail | 中间搜索 | 右侧结果 */
+  .page{
+    display:grid;
+    grid-template-columns: 400px 580px 1fr;
+    gap:200px;
+    padding:10px;
+    min-height:100%;
+    align-items:start;
+  }
+
+  .rail{
+    position:sticky; top:12px; align-self:start;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px;
+  }
+  .title{margin:0 0 8px;font-size:18px;font-weight:800;}
+  .muted{color:var(--muted);font-size:12.5px}
+
+  /* 左侧购物车列表 */
+  .list{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto;padding-right:4px;}
+  .diet-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;}
+  .diet-name{font-weight:700;font-size:13.5px;margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* 中间搜索面板 */
+  .search-panel{
+    position:sticky; top:12px; align-self:start;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px;
+  }
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .search-input{flex:1;min-width:160px;padding:10px;border:1px solid var(--line);border-radius:8px}
+
+  /* 右侧结果列表 */
+  .result-list{display:flex;flex-direction:column;gap:10px;}
+  .result{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;}
+
+  .btn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-weight:600;font-size:13px;cursor:pointer}
+  .btn-primary{border-color:transparent;background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-dark)}
+  .btn-danger{border-color:#f2c6c6;background:#fff;color:var(--danger)}
+
+  input[type="number"]{width:72px;padding:8px;border:1px solid var(--line);border-radius:8px}
+
+  /* 窄屏响应式：改为上下排 */
+  @media (max-width: 1100px){
+    .page{grid-template-columns: 280px 1fr;}
+    .result-list{grid-column: 1 / -1;}
+  }
+  @media (max-width: 800px){
+    .page{grid-template-columns: 1fr;}
+    .rail, .search-panel{position:static}
+  }
   </style>
 </head>
 <body>
+  <div class="page">
 
-   
-  
-   <div class="container">
-    <div class="card">
-      <div class="title-line">
-      <h1 class="title">
-        <span class="icon">🍽️</span>
-        Search Food
-      </h1>
-      <a href="/main" class="btn btn-secondary">Back</a>
-      </div>
-      
-
-      <form class="search-row" action="/searchCalories" method="get">
-        <input type="text" name="foodInput" placeholder="Search food, e.g., apple" value="<%= typeof foodInput !== 'undefined' ? foodInput : '' %>" required>
+    <!-- 左：记录饮食（购物车） -->
+    <aside class="rail" aria-label="记录饮食侧栏">
+      <form action="/searchCalories" method="get" class="row">
+        <input name="foodInput" class="search-input" placeholder="Search Food" required>
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
+      <h2 class="title">记录饮食</h2>
+      <div class="muted" style="margin-bottom:8px;">
+        今日总热量：<strong><%= typeof totalCalories !== 'undefined' ? totalCalories : 0 %></strong> kcal
+      </div>
 
-      <div class="divider"></div>
-
-  <% if (foodarray && foodarray.length != 0) { %>
-    <% for (let i = 0; i < foodarray.length; i++) { 
-         const item = foodarray[i];
-         const serving = Array.isArray(item.servings?.serving) ? item.servings.serving[0] : item.servings?.serving;
-         const calories = serving?.calories || 0;
-         const desc = serving?.serving_description || '';
-    %>
-    
-       <div class="food-item">
-              <div class="food-info">
-                <p class="food-name"><%= item.food_name %></p>
-                <div class="food-meta">
-                  <span>Calories: <strong><%= calories %></strong> kcal</span>
-                  <span><%= desc %></span>
+      <div class="list">
+        <% if (Array.isArray(eatenList) && eatenList.length > 0) { %>
+          <% eatenList.forEach(item => { %>
+            <div class="diet-item">
+              <div>
+                <p class="diet-name"><%= item.food_name %></p>
+                <div class="muted">
+                  <%= Number(item.calories) || 0 %> kcal/份
+                  · 份数：<%= Number(item.quantity) || 1 %>
+                  · 小计：<%= (Number(item.calories)||0) * (Number(item.quantity)||1) %> kcal
                 </div>
               </div>
-
-        <!-- 加入已吃列表 -->
-        <form action="/eaten/add" method="post" class="actions add-form">
-          <input type="hidden" name="food_name" value="<%= item.food_name %>">
-          <input type="hidden" name="calories" value="<%= calories %>">
-          <input type="hidden" name="serving_description" value="<%= desc %>">
-          <label>份数:
-            <input class='qty' type="number" name="quantity" value="0" min="0" step="1">
-          </label>
-          <button type="submit" class="btn btn-primary">加入已吃列表</button>
-        </form>
+              <form action="/eaten/remove" method="post">
+                <input type="hidden" name="id" value="<%= item.id %>">
+                <button type="submit" class="btn btn-danger">删除</button>
+              </form>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="diet-item" style="border-style:dashed;">
+            <div>
+              <p class="diet-name">还没有记录</p>
+              <div class="muted">前往“Search Food”添加你吃了什么</div>
+            </div>
+          </div>
+        <% } %>
       </div>
-    <% } %>
-  <% } %>
-  
-  <!-- 弹窗元素 -->
-  <div id="notificationModal" class="modal">
-    <div class="modal-content">
-      <p id="modalMessage"></p>
-      <button id="modalOk">确定</button>
-    </div>
+
+      <div class="row" style="margin-top:10px;">
+        <a class="btn" href="/main">Home</a>
+      </div>
+    </aside>
+
+    
+    
+
+    <!-- 右：显示食物结果区域 -->
+    <main class="result-list" aria-label="搜索结果">
+      <% if (foodarray && foodarray.length != 0) { %>
+        <% for (let i = 0; i < foodarray.length; i++) {
+             const item = foodarray[i];
+             const serving = Array.isArray(item.servings?.serving) ? item.servings.serving[0] : item.servings?.serving;
+             const calories = serving?.calories || 0;
+             const desc = serving?.serving_description || '';
+        %>
+          <div class="result">
+            <div>
+              <div style="font-weight:700"><%= item.food_name %></div>
+              <div class="muted">Calories: <%= calories %> kcal · <%= desc %></div>
+            </div>
+            <form action="/eaten/add" method="post" class="row">
+              <input type="hidden" name="food_name" value="<%= item.food_name %>">
+              <input type="hidden" name="calories" value="<%= calories %>">
+              <input type="hidden" name="serving_description" value="<%= desc %>">
+              <label class="muted" for="qty-<%= i %>">份数:</label>
+              <input id="qty-<%= i %>" type="number" name="quantity" min="1" value="1">
+              <button type="submit" class="btn btn-primary">加入</button>
+            </form>
+          </div>
+        <% } %>
+      <% } %>
+    </main>
+
   </div>
-
-  <div id="notification" style="position: fixed; top: 20px; right: 20px; padding: 16px; background: #4CAF50; color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); transform: translateX(120%); transition: transform 0.3s ease; z-index: 1000;"></div>
-
 </body>
 <script src="/js/searchFood.js"></script>
 </html>
