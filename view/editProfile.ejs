@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - HealthyPal</title>
+  <link rel="stylesheet" href="/css/register.css"> <!-- 复用注册页样式 -->
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <h1 class="title">Edit Profile</h1>
+    </div>
+
+    <form action="/updateProfile" method="POST" enctype="multipart/form-data">
+      <div class="field">
+        <label class="label" for="username">Username</label>
+        <input type="text" id="username" name="newUsername" 
+               value="<%= user.username %>" class="input" required>
+      </div>
+
+      <div class="field">
+        <label class="label" for="profile">Profile Description</label>
+        <textarea id="profile" name="profile" class="input" 
+                  style="height: 120px;"><%= user.profile %></textarea>
+        <div class="hint">Tell others about your fitness journey</div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="avatar">Profile Picture</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" class="input">
+        <div class="hint">Upload a square image (recommended 400x400px)</div>
+        <% if (user.avatar) { %>
+          <div style="margin-top: 10px;">
+            <img src="<%= user.avatar %>" alt="Current avatar" style="width: 80px; border-radius: 50%;">
+          </div>
+        <% } %>
+      </div>
+
+      <div class="footer-bar">
+        <button type="button" class="fab-back" onclick="window.location.href='/userProfile'">
+          <i>←</i>
+        </button>
+        <button type="submit" class="cta">Save</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

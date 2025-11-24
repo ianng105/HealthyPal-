@@ -12,6 +12,7 @@
       --text:#0f172a;
       --muted:#64748b;
       --border:#e2e8f0;
+      --success: #10b981;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
@@ -27,26 +28,49 @@
     .nav-left,.nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .brand{font-weight:800;letter-spacing:.2px}
     .btn{
-      padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-weight:600
+      padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text);font-weight:600;
+      cursor:pointer;transition:all 0.2s ease;
+    }
+    .btn:hover{
+      background:#f1f5f9;
     }
     .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn-primary:hover{
+      background:#2563eb;
+    }
     .danger{color:#ef4444}
 
-    /* 头像区：置中 + 放大 */
+    /* 成功提示 */
+    .alert-success {
+      background-color: #d1fae5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* 头像区 */
     .profile-card{
       background:var(--card);border:1px solid var(--border);border-radius:16px;
       padding:22px 16px;margin-bottom:16px;text-align:center;
       display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
     }
     .avatar{
-      width:140px;height:140px; /* 放大头像 */
+      width:140px;height:140px;
       border-radius:50%;object-fit:cover;display:block;
       border:3px solid #fff;box-shadow:0 8px 24px rgba(2,6,23,0.08);
     }
-    .username{font-size:20px;font-weight:800;margin-top:4px}
-    .plan{font-size:14px;color:var(--muted)}
+    .username{font-size:24px;font-weight:800;margin-top:4px}
+    .profile-bio {
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.5;
+    }
 
-    /* 主体布局：左侧信息 + 右侧日历 */
+    /* 主体布局 */
     .main-grid{
       display:grid;grid-template-columns:1fr 1fr;gap:16px;
     }
@@ -55,14 +79,29 @@
     }
 
     .card{
-      background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;
+      background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;
+      box-shadow:0 1px 3px rgba(0,0,0,0.05);
     }
-    .card h3{margin:6px 0 10px;font-size:16px}
+    .card h3{margin:0 0 16px;font-size:18px;color:var(--brand);border-bottom:1px solid var(--border);padding-bottom:8px;}
+    .info-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .info-grid strong {
+      color: var(--muted);
+      justify-self: start;
+      min-width: 100px;
+    }
+    .info-grid span {
+      word-break: break-all;
+    }
 
-    /* 日历缩小样式 */
+    /* 日历样式 */
     .calendar{
-      --cell-size:42px;      /* 缩小格子尺寸 */
-      --cell-font:12px;      /* 缩小字体 */
+      --cell-size:42px;
+      --cell-font:12px;
       --header-font:14px;
       --dow-font:11px;
     }
@@ -83,18 +122,6 @@
     }
     .day.today{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,130,246,0.15) inset}
     .day.muted{color:#94a3b8;background:#f8fafc}
-
-    /* 更紧凑的移动端日历 */
-    @media (max-width: 600px){
-      .calendar{
-        --cell-size:34px;
-        --cell-font:11px;
-        --header-font:13px;
-        --dow-font:10px;
-      }
-      .container{padding:12px}
-      .avatar{width:128px;height:128px} /* 窄屏仍保持较大头像 */
-    }
   </style>
 </head>
 <body>
@@ -104,44 +131,84 @@
       <div class="nav-left">
         <span class="brand">HealthyPal</span>
         <a href="/main" class="btn">Home</a>
-        
+      </div>
+      <div class="nav-right">
+        <a href="/editProfile" class="btn btn-primary">Edit Profile</a>
       </div>
     </nav>
 
-    <!-- 头像置中放大 -->
+    <!-- 成功提示 -->
+    <% if (typeof success !== 'undefined' && success === 'updated') { %>
+      <div class="alert-success">Profile updated successfully!</div>
+    <% } %>
+
+    <!-- 个人信息概览 -->
     <section class="profile-card">
-      <!-- 如果你有头像 URL，可用 user.avatarUrl；没有就用一个占位符字母头像或本地默认图 -->
-      <img class="avatar" src="<%= (typeof user !== 'undefined' && user.avatarUrl) ? user.avatarUrl : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23e2e8f0%22/><text x=%2250%25%22 y=%2252%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2256%22 fill=%22%2364758b%22 font-family=%22sans-serif%22>%F0%9F%91%A4</text></svg>' %>" alt="avatar"/>
-      <div class="username"><%= (typeof user !== 'undefined' && user.username) ? user.username : '匿名用户' %></div>
-     
+      <img class="avatar" 
+           src="<%= user.avatar ? user.avatar : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23e2e8f0%22/><text x=%2250%25%22 y=%2252%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2256%22 fill=%22%2364758b%22 font-family=%22sans-serif%22>%F0%9F%91%A4</text></svg>' %>" 
+           alt="<%= user.username %>'s avatar">
+      <div class="username"><%= user.username %></div>
+      <p class="profile-bio"><%= user.profile ? user.profile : 'No profile description yet. Tell others about your fitness journey!' %></p>
     </section>
 
     <!-- 主体：信息与日历 -->
     <div class="main-grid">
       <section class="card">
-        <h3>Profile</h3>
-        <p><strong>Username:</strong> <%= (typeof user !== 'undefined' && user.username) ? user.username : '匿名用户' %></p>
-     
-        
+        <h3>Personal Details</h3>
+        <div class="info-grid">
+          <strong>Username:</strong> <span><%= user.username %></span>
+        </div>
+        <div class="info-grid">
+          <strong>Email:</strong> <span><%= user.email %></span>
+        </div>
+        <% if (user.height || user.weight || user.gender || user.birthday || user.goal || user.TDEE || user.minimumIntake || user.maximumIntake) { %>
+          <div style="margin-top: 10px; font-style: italic; color: var(--muted);">Body Information (only visible if set):</div>
+          <% if (user.height) { %>
+            <div class="info-grid">
+              <strong>Height:</strong> <span><%= user.height + ' cm' %></span>
+            </div>
+          <% } %>
+          <% if (user.weight) { %>
+            <div class="info-grid">
+              <strong>Weight:</strong> <span><%= user.weight + ' kg' %></span>
+            </div>
+          <% } %>
+          <% if (user.gender) { %>
+            <div class="info-grid">
+              <strong>Gender:</strong> <span><%= user.gender %></span>
+            </div>
+          <% } %>
+          <% if (user.birthday) { %>
+            <div class="info-grid">
+              <strong>Birthday:</strong> <span><%= new Date(user.birthday).toLocaleDateString() %></span>
+            </div>
+          <% } %>
+          <% if (user.goal) { %>
+            <div class="info-grid">
+              <strong>Fitness Goal:</strong> <span><%= user.goal %></span>
+            </div>
+          <% } %>
+          <% if (user.TDEE) { %>
+            <div class="info-grid">
+              <strong>Daily Calorie Target:</strong> <span><%= user.TDEE + ' kcal' %></span>
+            </div>
+          <% } %>
+          <% if (user.minimumIntake && user.maximumIntake) { %>
+            <div class="info-grid">
+              <strong>Intake Range:</strong> <span><%= user.minimumIntake %> - <%= user.maximumIntake %> kcal</span>
+            </div>
+          <% } %>
+        <% } %>
       </section>
 
       <section class="card calendar">
+        <h3>Activity Calendar</h3>
         <div class="calendar-header">
-          <div class="calendar-title">Calendar</div>
-          <!-- 可添加切换月份按钮（如需要） -->
+          <div class="calendar-title"><%= new Date().toLocaleDateString('default', { month: 'long', year: 'numeric' }) %></div>
         </div>
         <div class="calendar-grid">
-          <div class="dow">Sun</div>
-          <div class="dow">Mon</div>
-          <div class="dow">Tue</div>
-          <div class="dow">Wed</div>
-          <div class="dow">Thu</div>
-          <div class="dow">Fri</div>
-          <div class="dow">Sat</div>
-
-          <!-- 示例静态日期格。你的项目若已有渲染逻辑，可用循环替换这些占位符。 -->
+          <div class="dow">Sun</div><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div>
           <%
-            // 生成一个紧凑月视图示例（以当前月为例）。若你已有现成日历数据，请替换为你的迭代渲染。
             const today = new Date();
             const year = today.getFullYear();
             const month = today.getMonth();
@@ -149,7 +216,7 @@
             const startDow = firstDay.getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const prevMonthDays = new Date(year, month, 0).getDate();
-            const totalCells = 42; // 6行 * 7列
+            const totalCells = 42; // 6 rows * 7 days
             for (let i = 0; i < totalCells; i++) {
               let dayNum, cls = 'day';
               if (i < startDow) {
