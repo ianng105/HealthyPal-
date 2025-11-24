@@ -18,7 +18,8 @@ const multer = require('multer'); // 新增：文件上传中间件
 // 配置头像上传存储
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/avatars'); // 确保此目录存在
+    // 确保路径是 public/uploads/avatars（与实际文件夹一致）
+    cb(null, 'public/uploads/avatars');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -260,7 +261,7 @@ app.post('/updateProfile', upload.single('avatar'), async (req, res) => {
       userUpdates.profile = req.body.profile;
     }
     if (req.file) {
-      userUpdates.avatar = '/upload/avatars/' + req.file.filename;
+      userUpdates.avatar = '/uploads/avatars/' + req.file.filename;
     }
     if (Object.keys(userUpdates).length > 0) {
       await User.updateUser(user._id, userUpdates);
