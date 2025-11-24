@@ -130,11 +130,6 @@ app.get('/main', async (req, res) => {
   }
 });
 
-// 身体信息页面
-app.get('/bodyInfo', (req, res) => {
-  res.render('bodyInfo');
-});
-
 // 身体信息表单页面
 app.get('/bodyInfoForm', (req, res) => {
   res.render('bodyInfoForm');
@@ -580,21 +575,40 @@ function calculateTDEE(bmr, activity) {
 }
 
 //111
-// GET 体测页面
+
 app.get('/bodyInfo', async (req, res) => {
   if (!req.session.loggedIn) return res.redirect('/login');
 
   let userBody = {};
   try {
-    userBody = await Userbody.findUserBodyByUserId(req.session.userId) || {};
+    const result = await Userbody.findUserBodyByUserId(req.session.userId);
+    if (result) userBody = result;
   } catch (err) {
-    console.error('查询体测信息失败:', err);
+    console.error('读取体测数据失败:', err);
   }
-  
-  // 永远传一个对象
+
+  // 这一行是生死线！必须传 userBody
   res.render('bodyInfo', { userBody });
 });
 
+app.post('/bodyInfo', async (req, res) => {
+  if (!req.session.loggedIn) return res.redirect('/login');
+
+  const userId = req.session.userId;
+
+  try {
+    const existing = await Userbody.findUserBodyByUserId(userId);
+    if (existing) {
+      await Userbody.updateUserBody(userId, req.body);
+    } else {
+      await Userbody.createUserBody({ userId, ...req.body });
+    }
+    res.redirect('/bodyInfo');
+  } catch (err) {
+    console.error('保存体测数据失败:', err);
+    res.status(500).send('保存失败');
+  }
+});
 
 // 启动服务器
 async function start() {
