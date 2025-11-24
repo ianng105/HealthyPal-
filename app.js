@@ -338,6 +338,43 @@ app.post('/register', async (req, res) => {
   }
 });
 
+//----------------post---------------//
+// 提交新帖子（表单版本）
+app.post('/newPost', async (req, res) => {
+  try {
+    if (!req.session || !req.session.loggedIn) {
+      return res.redirect('/login');
+    }
+    const username = req.session.username;
+    const { caption, image } = req.body; // newPost.ejs 中的 name 需对应
+
+    // 从 session 取已吃列表与总热量，作为快照保存到帖子（可选）
+    const eatenList = Array.isArray(req.session.eatenList) ? req.session.eatenList : [];
+    const totalCalories = eatenList.reduce((sum, it) => {
+      const c = Number(it.calories) || 0;
+      const q = Number(it.quantity) || 1;
+      return sum + c * q;
+    }, 0);
+
+    const postData = {
+      username,
+      image: image || null, // 如果你没有实现图片上传，这里可先存 null 或一个占位
+      caption: typeof caption == 'string' ? caption : '',
+      eatenListSnapshot: eatenList,              // 可选
+      totalCaloriesSnapshot: totalCalories,      // 可选
+      date: new Date()
+    };
+
+    await Post.createPost(postData);
+
+    // 发帖成功后跳转主页
+    return res.redirect('/main');
+  } catch (err) {
+    console.error('发布帖子失败:', err);
+    return res.status(500).send('发布失败，请重试');
+  }
+});
+
 // 提交身体信息
 app.post('/submit-body-info', async (req, res) => {
   const username = req.session.username;
