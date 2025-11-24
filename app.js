@@ -332,6 +332,47 @@ app.post('/register', async (req, res) => {
     res.redirect('/register?error=1');
   }
 });
+//=======================delete account=================//
+app.post('/delete', async (req, res) => {
+  if (!req.session.loggedIn) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  try {
+    const username = req.session.username;
+
+    // Find and delete posts
+    const deletePosts = await Post.findPostByUsername(username);
+    for (let i = 0; i < deletePosts.length; i++) {
+      await Post.deletePost(deletePosts[i]._id);
+    }
+
+    // Find user and delete
+    const user = await User.findUserByUsername(username);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const id = user._id;
+
+    await Userbody.deleteUserBody(id);
+    await User.deleteUser(id);
+
+    console.log(`finish delete ${username} 's account`);
+
+    // Destroy session after deletions
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Session destroy failed:', err);
+        return res.status(500).send('Failed to delete account');
+      }
+      return res.redirect('/');
+    });
+  } catch (err) {
+    console.error('Deletion failed:', err);
+    res.status(500).send('Server error during deletion');
+  }
+});
+
 
 //----------------post---------------//
 // 提交新帖子（表单版本）
