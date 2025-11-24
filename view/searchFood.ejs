@@ -14,7 +14,7 @@
   /* 页面整体三列：左侧记录饮食 rail | 中间搜索 | 右侧结果 */
   .page{
     display:grid;
-    grid-template-columns: 400px 580px 1fr;
+    grid-template-columns: 440px 580px 1fr;
     gap:200px;
     padding:10px;
     min-height:100%;
@@ -72,9 +72,9 @@
         <input name="foodInput" class="search-input" placeholder="Search Food" required>
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
-      <h2 class="title">记录饮食</h2>
+      <h2 class="title">Food Record</h2>
       <div class="muted" style="margin-bottom:8px;">
-        今日总热量：<strong><%= typeof totalCalories !== 'undefined' ? totalCalories : 0 %></strong> kcal
+        Total Calories Today：<strong><%= typeof totalCalories !== 'undefined' ? totalCalories : 0 %></strong> kcal
       </div>
 
       <div class="list">
@@ -84,21 +84,21 @@
               <div>
                 <p class="diet-name"><%= item.food_name %></p>
                 <div class="muted">
-                  <%= Number(item.calories) || 0 %> kcal/份
-                  · 份数：<%= Number(item.quantity) || 1 %>
-                  · 小计：<%= (Number(item.calories)||0) * (Number(item.quantity)||1) %> kcal
+                  <%= Number(item.calories) || 0 %> kcal/portion
+                  · portion：<%= Number(item.quantity) || 1 %>
+                  · sum：<%= (Number(item.calories)||0) * (Number(item.quantity)||1) %> kcal
                 </div>
               </div>
               <form action="/eaten/remove" method="post">
                 <input type="hidden" name="id" value="<%= item.id %>">
-                <button type="submit" class="btn btn-danger">删除</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
               </form>
             </div>
           <% }) %>
         <% } else { %>
           <div class="diet-item" style="border-style:dashed;">
             <div>
-              <p class="diet-name">还没有记录</p>
+              <p class="diet-name">Not record yet</p>
               
             </div>
           </div>
@@ -131,9 +131,9 @@
               <input type="hidden" name="food_name" value="<%= item.food_name %>">
               <input type="hidden" name="calories" value="<%= calories %>">
               <input type="hidden" name="serving_description" value="<%= desc %>">
-              <label class="muted" for="qty-<%= i %>">份数:</label>
+              <label class="muted" for="qty-<%= i %>">Portion:</label>
               <input id="qty-<%= i %>" type="number" name="quantity" min="1" value="1">
-              <button type="submit" class="btn btn-primary">加入</button>
+              <button type="submit" class="btn btn-primary">Add</button>
             </form>
           </div>
         <% } %>
