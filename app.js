@@ -105,14 +105,15 @@ app.get('/main', async (req, res) => {
     return res.redirect("login");
   }
   try {
+
     const rawPosts = await Post.findAllPosts();
     const posts = rawPosts.map(p => ({
       ...p,
       user: { username: p.username || '匿名用户' },
       image: p.image || null,
-      caption: typeof p.caption === 'string' ? p.caption : ''
+      caption: typeof p.caption === 'string' ? p.caption : '',
+      healthyJudge:p.healthyJudge
     }));
-
     // 新增：从数据库获取当前用户的完整信息
     const currentUser = await User.findUserByUsername(req.session.username);
     const displayName = req.session.username || '用户';
@@ -122,8 +123,7 @@ app.get('/main', async (req, res) => {
       const q = Number(it.quantity) || 1;
       return sum + c * q;
     }, 0);
-
-    res.render('main', { posts, displayName, eatenList, totalCalories, currentUser });
+    res.render('main', { posts, displayName, eatenList, totalCalories, currentUser});
   } catch (err) {
     console.error('加载帖子失败:', err);
     res.status(500).send('服务器错误，无法加载帖子');
@@ -392,12 +392,29 @@ app.post('/newPost', async (req, res) => {
       return sum + c * q;
     }, 0);
 
+    let healthyJudge=""
+    const bodyInfo = await Userbody.findUserBodyByUserId(req.session.userId);
+    const mIn=bodyInfo.minimumIntake/3;
+    const mAx=bodyInfo.maximumIntake/3;
+    console.log("maximum: ",mAx);
+    console.log("minimum: ",mIn);
+    if(totalCalories>=mIn && totalCalories<=mAx){
+    	 healthyJudge="Healthy";
+    }
+    else if(totalCalories<mIn){
+    	 healthyJudge="Unhealthy";
+    }
+    else{
+    	 healthyJudge="Fat";
+    }
+
     const postData = {
       username,
       image: image || null, // 如果你没有实现图片上传，这里可先存 null 或一个占位
       caption: typeof caption == 'string' ? caption : '',
       eatenListSnapshot: eatenList,              // 可选
-      totalCaloriesSnapshot: totalCalories,      // 可选
+      totalCaloriesSnapshot: totalCalories,    
+      healthyJudge:healthyJudge,
       date: new Date()
     };
 
