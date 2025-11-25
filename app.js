@@ -496,6 +496,14 @@ app.post('/login', async (req, res) => {
   }
 });
 
+const postController = require('./controller/postController');
+// 修改帖子（使用 PATCH 方法更符合 RESTful 规范）
+app.patch('/posts/:id', postController.updateOwnPost);
+
+// 删除帖子
+app.delete('/posts/:id', postController.deleteOwnPost);
+
+
 // 添加食物到已吃列表
 app.post('/eaten/add', (req, res) => {
   const { food_name, calories, serving_description, quantity } = req.body;
