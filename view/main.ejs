@@ -251,7 +251,7 @@ white-space: pre-wrap;
   <a href="/userProfile" class="floating-profile-btn" title="Profile">
   <!-- 使用用户头像 头像替换默认图标 -->
     <img 
-      src="<%= currentUser.avatar || '/images/default-avatar.jpg' %>" 
+      src="<%= currentUser.avatar || '/uploads/avatars/defaulticon.jpeg' %>" 
       alt="Profile" 
       class="profile-avatar"
     >
@@ -296,7 +296,7 @@ white-space: pre-wrap;
              <%= new Date(post.date).toLocaleString() %>
               </div>
             <header class="post-header">
-              <img class="avatar" src="<%= (post.user && post.user.avatar) ? post.user.avatar : '/images/avatar.jpg' %>" alt="avatar" />
+              <img class="avatar" src="<%=post.avatar|| '/uploads/avatars/defaulticon.jpeg' %>" alt="avatar" />
               <div class="username"><%= post.user && post.user.username ? post.user.username : '匿名用户' %></div>
               <div><%=post.healthyJudge%></div>
               <% if(post.healthyJudge=="Healthy"){%>
