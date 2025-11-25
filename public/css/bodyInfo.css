@@ -92,3 +92,47 @@
       .content { margin-left: 0; padding: 16px; }
       form.body-form { grid-template-columns: 1fr; }
     }
+    /* 水波纹动画 */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: fixed;
+  border-radius: 50%;
+  background-color: rgba(59, 130, 246, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* 烟花动画 */
+@keyframes firework {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.firework {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1001;
+}
