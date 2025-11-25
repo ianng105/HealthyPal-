@@ -290,8 +290,14 @@ app.post('/updateProfile', upload.single('avatar'), async (req, res) => {
       if (existing) {
         return res.redirect('/editProfile?error=usernameExists');
       }
+      const newUsername = req.body.newUsername;
       userUpdates.username = req.body.newUsername;
       req.session.username = req.body.newUsername;
+      await Post.updateMany(
+        { username: username },
+        { $set: { username: newUsername } }
+  );
+  req.session.username = newUsername;
     }
     if (req.body.newEmail && req.body.newEmail !== user.email) {
       userUpdates.email = req.body.newEmail;
