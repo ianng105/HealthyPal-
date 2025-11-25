@@ -39,6 +39,15 @@
       background:#2563eb;
     }
     .danger{color:#ef4444}
+    .postcard{
+      max-width: 800px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 1px 3px rgba(0,0,0,0.05);
+    }
+    .postcard h3{margin:0 0 16px;font-size:18px;color:var(--brand);border-bottom:1px solid var(--border);padding-bottom:8px;}
 
     /* 成功提示 */
     .alert-success {
@@ -239,6 +248,10 @@
           <% } %>
         </div>
       </section>
+      <section class="postcard">
+        <h3>Your Post</h3>
+      </section>
+      
     </div>
   </div>
 
