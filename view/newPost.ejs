@@ -117,7 +117,10 @@
         <i class="fa-solid fa-chart-line"></i>
         <span>Body Info</span>
       </a>
-     
+      <a href="/searchFood">
+        <i class="fa-solid fa-utensils"></i>
+        <span>Search Food</span>
+      </a>
     </nav>
     <a href="/logout" class="logout">
       <i class="fa-solid fa-right-from-bracket"></i>
@@ -134,7 +137,7 @@
       </div>
 
       <!-- Submit to /newPost with multipart/form-data to support image upload -->
-      <form class="new-post-form" id="postForm" action="/newPost" method="POST" ">
+      <form class="new-post-form" id="postForm" action="/newPost" method="POST" enctype="multipart/form-data">
         
         <!-- Username: optional. If you have auth, fill on server side. -->
         <!-- Image upload: required -->
