@@ -140,6 +140,41 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.profile-post-card {
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.post-time {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px; /* 时间与内容之间留间距 */
+}
+
+.post-body {
+  margin-left: 5px;
+}
+
+.post-caption {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.post-image {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.post-calories {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 10px;
+}
   </style>
 </head>
 <body>
@@ -181,7 +216,7 @@
           <strong>Email:</strong> <span><%= user.email %></span>
         </div>
         <form method="POST" action="/delete">
-        	<button type=submit>Delete Account</button>
+        	<button type=submit class="delete-btn">Delete Account</button>
         </form>
         <% if (user.height || user.weight || user.gender || user.birthday || user.goal || user.TDEE || user.minimumIntake || user.maximumIntake) { %>
           <div style="margin-top: 10px; font-style: italic; color: var(--muted);">Body Information (only visible if set):</div>
@@ -267,30 +302,39 @@
   <% if (posts && posts.length > 0) { %>
     <% posts.forEach(p => { %>
 
-      <div class="post-item">
-        <div class="post-time"><%= new Date(p.date).toLocaleString() %></div>
+<div class="profile-post-card">
 
+    <!-- 时间 -->
+    <div class="post-time">
+        <%= new Date(p.date).toLocaleString() %>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="post-body">
         <div class="post-caption"><%= p.caption %></div>
 
         <% if (p.image) { %>
-          <img src="<%= p.image %>" class="post-img">
+            <img src="<%= p.image %>" class="post-image">
         <% } %>
 
         <% if (p.totalCaloriesSnapshot !== undefined) { %>
-          <div>Total calories: <%= p.totalCaloriesSnapshot %> kcal</div>
+            <div class="post-calories">
+                <strong>Total calories: <%= p.totalCaloriesSnapshot %> kcal</strong>
+            </div>
         <% } %>
 
-        
-       <form action="/posts/<%= p._id %>/delete" method="POST" class="delete-form">
-          <button type="submit" class="delete-btn">Delete</button>
-      </form>
+        <!-- 删除按钮（你已有） -->
+        <form action="/posts/<%= p._id %>/delete" method="POST">
+            <button class="delete-btn">Delete</button>
+        </form>
+    </div>
 
-      </div>
+</div>
 
     <% }) %>
-  <% } else { %>
-    <p>No post yet</p>
-  <% } %>
+<% } else { %>
+    No post yet
+<% } %>
 </div>
       </section>
       
