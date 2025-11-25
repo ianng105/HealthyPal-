@@ -154,7 +154,8 @@ app.get('/main', async (req, res) => {
       const q = Number(it.quantity) || 1;
       return sum + c * q;
     }, 0);
-    res.render('main', { posts, displayName, eatenList, totalCalories, currentUser});
+    const username = req.session.username;
+    res.render('main', { posts, displayName, eatenList, totalCalories, currentUser,username});
   } catch (err) {
     console.error('加载帖子失败:', err);
     res.status(500).send('服务器错误，无法加载帖子');
