@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 const storagePost = multer.diskStorage({
   destination: function (req, file, cb) {
     // 确保路径是 public/uploads/avatars（与实际文件夹一致）
-    cb(null, 'public/uploads/avatars');
+    cb(null, 'public/uploads/images');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -614,17 +614,17 @@ app.get('/eaten', (req, res) => {
   }, 0);
   res.json({ list, totalCalories });
 });
-
-// ======================RESTful API - create
-app.post('/api/posts', uploadPost.single('image'),async (req, res) => {
+//=======================Restful API - read
+app.get('/api/posts/:username', async (req, res) => {
   try {
-     const { username,calories, caption } = req.body;
+    const result = await Post.findPostByUsername(req.params.username);
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: '获取帖子失败' });
   }
 });
 
+// ======================RESTful API - create
 // RESTful API - 创建帖子
 app.post('/api/posts', async (req, res) => {
   try {
