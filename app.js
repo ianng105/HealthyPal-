@@ -626,9 +626,9 @@ app.get('/api/posts/:username', async (req, res) => {
 
 // ======================RESTful API - create
 // RESTful API - 创建帖子
-app.post('/api/posts', async (req, res) => {
+app.post('/api/posts', uploadPost.single('image'),async (req, res) => {
   try {
-    const { username, password, image, calories, caption } = req.body;
+    const { username,image, calories, caption } = req.body;
     const un = await User.findUserByUsername(username);
     const body = await Userbody.findUserBodyByUserId(un._id);
     const mIn=body.minimumIntake
@@ -659,11 +659,10 @@ app.post('/api/posts', async (req, res) => {
 });
 
 //========================RESTful API - update
-app.put('/api/posts/:post_id',uploadPost.single('image'),async (req, res) => {
+app.put('/api/posts/:post_id',async (req, res) => {
   try {
-    const { username, caption ,calories} = req.body;
-    const un = await User.findUserByUsername(username);
-    const updateData = { image:req.file ? '/uploads/images/'+req.file.filename : null, calories: Number(calories), caption };
+    const {caption ,calories} = req.body;
+    const updateData = {calories: Number(calories), caption };
     await Post.updatePost(req.params.post_id, updateData);
     const result = await Post.findPostById(req.params.post_id);
     res.status(200).json(result);
