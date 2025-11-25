@@ -15,7 +15,7 @@ class User {
     // 新增默认头像和空简介
     const userDataWithDefaults = {
       ...userData,
-      avatar: userData.avatar || '/images/default-avatar.jpg', // 默认头像路径
+      avatar: userData.avatar || '/uploads/avatars/defaulticon.jpeg', // 默认头像路径
       profile: userData.profile || '' // 个人简介默认空
     };
     const result = await collection.insertOne(userDataWithDefaults);
