@@ -649,7 +649,6 @@ app.get('/eaten', (req, res) => {
   res.json({ list, totalCalories });
 });
 
-// RESTful API - 获取用户帖子
 app.get('/api/posts/:username', async (req, res) => {
   try {
     const result = await Post.findPostByUsername(req.params.username);
@@ -659,19 +658,30 @@ app.get('/api/posts/:username', async (req, res) => {
   }
 });
 
-// RESTful API - 创建帖子
-app.post('/api/posts', async (req, res) => {
+// ======================RESTful API - create
+app.post('/api/posts', uploadPost.single('image'),async (req, res) => {
   try {
-    const { username, password, image, calories, caption } = req.body;
+    const { username,calories, caption } = req.body;
     const un = await User.findUserByUsername(username);
-    if (!un || un.password !== password) {
-      return res.status(401).json({ error: "认证失败" });
+    const body = await Userbody.findUserBodyByUserId(un._id);
+    const mIn=body.minimumIntake
+    const mAx=body.maximumIntake;
+    let healthyJudge = "";
+    if(calories>=mIn && calories<=mAx){
+    	healthyJudge="Healthy";
+    }
+    if(calories>mAx){
+    	healthyJudge="Fat";
+    }
+    if(calories<mIn){
+    	healthyJudge="Unhealthy";
     }
     const postData = {
       username: un.username,
-      image,
+      image:req.file ? '/uploads/images/'+req.file.filename : null,
       calories: Number(calories),
       caption,
+      healthyJudge,
       date: new Date()
     };
     const result = await Post.createPost(postData);
@@ -681,15 +691,12 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
-// RESTful API - 更新帖子
-app.put('/api/posts/:post_id', async (req, res) => {
+//========================RESTful API - update
+app.put('/api/posts/:post_id',uploadPost.single('image'),async (req, res) => {
   try {
-    const { username, password, image, calories, caption } = req.body;
+    const { username, caption ,calories} = req.body;
     const un = await User.findUserByUsername(username);
-    if (!un || un.password !== password) {
-      return res.status(401).json({ error: "认证失败" });
-    }
-    const updateData = { image, calories: Number(calories), caption };
+    const updateData = { image:req.file ? '/uploads/images/'+req.file.filename : null, calories: Number(calories), caption };
     await Post.updatePost(req.params.post_id, updateData);
     const result = await Post.findPostById(req.params.post_id);
     res.status(200).json(result);
@@ -698,7 +705,8 @@ app.put('/api/posts/:post_id', async (req, res) => {
   }
 });
 
-// RESTful API - 删除帖子
+
+// RESTful API - delete
 app.delete("/api/posts/:post_id", async (req, res) => {
   try {
     await Post.deletePost(req.params.post_id);
