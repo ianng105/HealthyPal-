@@ -98,7 +98,7 @@
           <input type="number" id="TDEE" readonly 
                  value="<%= userBody.TDEE ? Math.round(userBody.TDEE) : '' %>"
                  style="background:#f8f9fa; color:#e74c3c; font-weight:bold; font-size:1.1em;" />
-          <div class="hint">每日总能量消耗（自动计算）</div>
+          <div class="hint">Total daily energy expenditure (automatically calculated)</div>
         </div>
 
         <div class="field">
@@ -106,7 +106,7 @@
           <input type="number" id="maximumIntake" readonly 
                  value="<%= userBody.maximumIntake || '' %>"
                  style="background:#f8f9fa; color:#27ae60; font-weight:bold;" />
-          <div class="hint">建议最高摄入（含盈余）</div>
+          <div class="hint">Recommended maximum intake (including surplus)</div>
         </div>
 
         <div class="field">
@@ -114,11 +114,11 @@
           <input type="number" id="minimumIntake" readonly 
                  value="<%= userBody.minimumIntake || '' %>"
                  style="background:#f8f9fa; color:#27ae60; font-weight:bold;" />
-          <div class="hint">建议最低摄入（含赤字）</div>
+          <div class="hint">Suggested minimum intake (with deficit)</div>
         </div>
         
         <div class="actions full">
-          <button type="button" class="btn btn-secondary" onclick="history.back()">Back</button>
+          <button type="button" class="btn btn-secondary" onclick="window.location.href='/main'">Back</button>
           <button type="submit" class="btn btn-primary">
             <i class="fa-solid fa-save"></i> Save & Recalculate
           </button>
