@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 const storagePost = multer.diskStorage({
   destination: function (req, file, cb) {
     // 确保路径是 public/uploads/avatars（与实际文件夹一致）
-    cb(null, 'public/uploads/images');
+    cb(null, 'public/uploads/avatars');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
