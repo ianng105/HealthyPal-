@@ -69,7 +69,7 @@ class Userbody {
     cleanData.updatedAt = new Date();
 
     const result = await collection.updateOne(
-      { userId: new ObjectId(userId) },
+      { userId: userId},
       { $set: cleanData }
     );
 
@@ -93,3 +93,4 @@ module.exports = {
   updateUserBody: Userbody.updateUserBody,
   deleteUserBody: Userbody.deleteUserBody
 };
+
