@@ -241,9 +241,13 @@ white-space: pre-wrap;
   </style>
 </head>
 <body>
-  <!-- 右上角圆形按钮：跳转到 /userProfile -->
   <a href="/userProfile" class="floating-profile-btn" title="Profile">
-    <i class="fa-solid fa-user"></i>
+  <!-- 使用用户头像 头像替换默认图标 -->
+    <img 
+      src="<%= currentUser.avatar || '/images/default-avatar.jpg' %>" 
+      alt="Profile" 
+      class="profile-avatar"
+    >
   </a>
 <div class="layout">
   <!-- 左侧侧边栏 -->
