@@ -86,7 +86,15 @@
       </form>
       <h2 class="title">Food Record</h2>
       <div class="muted" style="margin-bottom:8px;">
-        Total Calories Today：<strong><%= typeof totalCalories !== 'undefined' ? totalCalories : 0 %></strong> kcal
+        Total Calories Today：<strong style="font-size:22px;
+    <% 
+      const cal = typeof totalCalories !== 'undefined' ? totalCalories : 0;
+      if (cal > 1300) { %>color:#ef4444;<% } 
+      else if (cal >= 500) { %>color:#f59e0b;<% } 
+      else { %>color:#10b981;<% }
+    %>">
+    <%= cal %> kcal
+  </strong>
       </div>
 
       <div class="list">
@@ -157,4 +165,3 @@
 </body>
 <script src="/js/searchFood.js"></script>
 </html>
-
