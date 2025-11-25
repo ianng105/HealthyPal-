@@ -13,7 +13,8 @@ const Post = require('./model/post');
 const PORT = process.env.PORT || 8080;
 const cors = require('cors');
 const session = require('express-session');
-const multer = require('multer'); // 新增：文件上传中间件
+const multer = require('multer');
+const methodOverride = require('method-override'); // 新增：文件上传中间件
 
 // 配置头像上传存储
 const storage = multer.diskStorage({
@@ -60,6 +61,7 @@ app.set('views', path.join(__dirname, 'view'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 
 // 连接 MongoDB
 connectDB()
@@ -199,7 +201,8 @@ app.get('/userProfile', async (req, res) => {
     }
     const userBody = await Userbody.findUserBodyByUserId(user._id);
     const userProfileData = { ...user, ...userBody };
-    res.render('userProfile', { user: userProfileData });
+    const posts = await Post.findPostByUsername(req.session.username);
+    res.render('userProfile', { user: userProfileData,posts });
   } catch (err) {
     console.error('加载个人资料失败:', err);
     res.status(500).send('服务器错误');
@@ -236,6 +239,35 @@ app.get('/editProfile', async (req, res) => {
   } catch (err) {
     console.error('加载编辑页面失败:', err);
     res.status(500).send('服务器错误');
+  }
+});
+
+// 页面版：删除帖子后返回 userProfile 页面
+app.post('/posts/:id/delete', async (req, res) => {
+  try {
+    if (!req.session.loggedIn) {
+      return res.redirect('/login');
+    }
+
+    const postId = req.params.id;
+
+    // 调用 controller 检查权限并删除
+    const post = await Post.findPostById(postId);
+    if (!post) {
+      return res.redirect('/userProfile?error=notfound');
+    }
+
+    if (post.username !== req.session.username) {
+      return res.redirect('/userProfile?error=forbidden');
+    }
+
+    await Post.deletePost(postId);
+
+    return res.redirect('/userProfile?success=deleted');
+
+  } catch (err) {
+    console.error('删除帖子失败:', err);
+    return res.redirect('/userProfile?error=server');
   }
 });
 
