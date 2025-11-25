@@ -40,7 +40,7 @@
     }
     .danger{color:#ef4444}
     .postcard{
-      max-width: 800px;
+      max-width: 980px;
       background:var(--card);
       border:1px solid var(--border);
       border-radius:16px;
@@ -131,6 +131,15 @@
     }
     .day.today{border-color:var(--brand);box-shadow:0 0 0 2px rgba(59,130,246,0.15) inset}
     .day.muted{color:#94a3b8;background:#f8fafc}
+    .delete-btn {
+  margin-top: 10px;
+  background-color: red;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -248,11 +257,43 @@
           <% } %>
         </div>
       </section>
-      <section class="postcard">
-        <h3>Your Post</h3>
-      </section>
+     
       
     </div>
+    
+     <section class="card postcard">
+        <h3>Your Post</h3>
+        <div class="user-post-list">
+  <% if (posts && posts.length > 0) { %>
+    <% posts.forEach(p => { %>
+
+      <div class="post-item">
+        <div class="post-time"><%= new Date(p.date).toLocaleString() %></div>
+
+        <div class="post-caption"><%= p.caption %></div>
+
+        <% if (p.image) { %>
+          <img src="<%= p.image %>" class="post-img">
+        <% } %>
+
+        <% if (p.totalCaloriesSnapshot !== undefined) { %>
+          <div>Total calories: <%= p.totalCaloriesSnapshot %> kcal</div>
+        <% } %>
+
+        
+       <form action="/posts/<%= p._id %>/delete" method="POST" class="delete-form">
+          <button type="submit" class="delete-btn">Delete</button>
+      </form>
+
+      </div>
+
+    <% }) %>
+  <% } else { %>
+    <p>No post yet</p>
+  <% } %>
+</div>
+      </section>
+      
   </div>
 
 </body>
