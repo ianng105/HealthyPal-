@@ -291,8 +291,14 @@ app.post('/updateProfile', upload.single('avatar'), async (req, res) => {
       if (existing) {
         return res.redirect('/editProfile?error=usernameExists');
       }
+      const newUsername = req.body.newUsername;
       userUpdates.username = req.body.newUsername;
       req.session.username = req.body.newUsername;
+       await Post.updateMany(
+        { username: username },
+        { $set: { username: newUsername } }
+  );
+  req.session.username = newUsername;
     }
     if (req.body.newEmail && req.body.newEmail !== user.email) {
       userUpdates.email = req.body.newEmail;
@@ -303,6 +309,10 @@ app.post('/updateProfile', upload.single('avatar'), async (req, res) => {
     }
     if (req.file) {
       userUpdates.avatar = '/uploads/avatars/' + req.file.filename;
+      await Post.updateMany(
+    { username: username },
+    { $set: { avatar: userUpdates.avatar } }
+  );
     }
     if (Object.keys(userUpdates).length > 0) {
       await User.updateUser(user._id, userUpdates);
@@ -440,11 +450,12 @@ app.post('/newPost', uploadPost.single('image'),async (req, res) => {
       const q = Number(it.quantity) || 1;
       return sum + c * q;
     }, 0);
-
-    let healthyJudge=""
     const bodyInfo = await Userbody.findUserBodyByUserId(req.session.userId);
-    const mIn=bodyInfo.minimumIntake/3;
-    const mAx=bodyInfo.maximumIntake/3;
+    let healthyJudge="Unknown"
+    if (bodyInfo && bodyInfo.minimumIntake && bodyInfo.maximumIntake) {
+  const mIn = bodyInfo.minimumIntake / 3;
+  const mAx = bodyInfo.maximumIntake / 3;
+
     console.log("maximum: ",mAx);
     console.log("minimum: ",mIn);
     if(totalCalories>=mIn && totalCalories<=mAx){
@@ -456,6 +467,7 @@ app.post('/newPost', uploadPost.single('image'),async (req, res) => {
     else{
     	 healthyJudge="Fat";
     }
+  }
     
     const postData = {
       username,
