@@ -139,6 +139,10 @@ app.get('/', (req, res) => {
   res.render('welcome');
 });
 
+app.get('/bodyInfoForm', (req, res) => {
+  res.render('bodyInfoForm');
+});
+
 // 登录页
 app.get('/login', (req, res) => {
   res.render('login');
