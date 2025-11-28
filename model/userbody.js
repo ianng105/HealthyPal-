@@ -69,7 +69,7 @@ class Userbody {
     cleanData.updatedAt = new Date();
 
     const result = await collection.updateOne(
-      { userId: userId},
+      { userId: new ObjectId(userId) },
       { $set: cleanData }
     );
 
