@@ -89,15 +89,16 @@ app.use(session({
   secret: 'your-secret-key-here',
   resave: false,
   saveUninitialized: false,
-  /*store: MongoStore.create({
+  store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
     ttl: 24 * 60 * 60   // session 有效期（秒）
-  }),
-  */
-  cookie: {
+  })
+  
+ /* cookie: {
     secure: /*false*/process.env.NODE_ENV === 'production',
     maxAge: 24 * 60 * 60 * 1000
   }
+*/
 }));
 
 // 从 fatSecret 搜索食物卡路里
