@@ -84,7 +84,7 @@ app.use(cors({
 
 // Session 配置
 //***delete the comment for server use***
-//const MongoStore = require('connect-mongo'); 
+const MongoStore = require('connect-mongo'); 
 app.use(session({
   secret: 'your-secret-key-here',
   resave: false,
