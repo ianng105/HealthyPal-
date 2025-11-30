@@ -41,15 +41,22 @@ we have totally 4 models in our project.The first one is user.js, the second one
 
 # Operation guide 
 1.login/registration 
+
 if you are new to this app, you can use register to create a new account in this app(for registration, you have to input a unique username, email and a safe password. If you have used our app before you can use your email and password to login.
 
 1.5 body information
+
 if you are new comer and you have registed, you will arrive to our information form page. Here you have to tell us your height, your weight,age ,sex and the goal of your diet , so we can use these data to calculate your TDEE.TDEE means how much calories you have to consume according to your activity level and we will calculate how much you should eat per meal.
 
-2.After login or fill in your body information, is our home page. Here you can see other users share their meal,how healthy is their meal and the ingredients. Of course you can create a new post as well. 
+2.After login or fill in your body 
+
+information, is our home page. Here you can see other users share their meal,how healthy is their meal and the ingredients. Of course you can create a new post as well. 
 
 3.search calories of food 
 
 In the home page, of your right hand side, we have a list to show your total daily calories and what you have eaten.Then you have to press the add button and you will go to the search food page. Here you have to first fill in what food you have eaten into the input bar (one food each time) and press search. Then we will provide you choices for you to choose which food is closer to what you eat. You can press up button to increase the quantity and add button to add its calories to the total calories. Then you can press share.
 
 4.share new post 
+
+In this page, you can choose an image from you device and write a caption for your post. Press share you will go back the home page and see you post there.
+    
