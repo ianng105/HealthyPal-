@@ -36,4 +36,5 @@ in the public folder,it stores the css, and images which is used in the project.
 # views
 inside the views folder their are 10 files. welcome.ejs is the first page when user reach , then we have register.ejs and login.ejs for the register and login page .Next is the bodyinfoForm and main.ejs . bodyinfoForm is a page for user to input their body information.And the main page is the page which user can see other user's post newPost.ejs is for user the share new post , searchFood.ejs is for user to search calories of food. bodyinfo.ejs is similar to bodyinfoForm, but it focus on display and update user's body information instead of create a new one.userProfile.ejs is for displaying data of user and posts they have shared and lastly, the editProfile is for editing user data.
 # model
+we have totally 4 models in our project.The first one is user.js, the second one is userbody.js,the third one is post.js and the last one is mongo.js. user and post is for doing crud operations on the user account and shared posts.userbody is for doing crud operations on the body information of user and the mongo one is for connection and use the database.
 #
