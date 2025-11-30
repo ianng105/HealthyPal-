@@ -42,15 +42,15 @@ we have totally 4 models in our project.The first one is user.js, the second one
 # Operation guide 
 1.login/registration 
 
-if you are new to this app, you can use register to create a new account in this app(for registration, you have to input a unique username, email and a safe password. If you have used our app before you can use your email and password to login.
+if you are new to this app, you can use register to create a new account in this app(for registration, you have to input a unique username, email and a safe password)which implement the create operation of crud of user. If you have used our app before you can use your email and password to login.
 
 1.5 body information
 
-if you are new comer and you have registed, you will arrive to our information form page. Here you have to tell us your height, your weight,age ,sex and the goal of your diet , so we can use these data to calculate your TDEE.TDEE means how much calories you have to consume according to your activity level and we will calculate how much you should eat per meal.
+if you are new comer and you have registed, you will arrive to our information form page. Here you have to tell us your height, your weight,age ,sex and the goal of your diet , so we can use these data to calculate your TDEE.TDEE means how much calories you have to consume according to your activity level and we will calculate how much you should eat per meal and implement create operation of crud of the userbody model(which implement create operation of body information).
 
 2.After login or fill in your body 
 
-information, is our home page. Here you can see other users share their meal,how healthy is their meal and the ingredients. Of course you can create a new post as well. 
+information, is our home page. Here you can see other users share their meal,how healthy is their meal and the ingredients( which implements the read operation of post model) here. Of course you can create a new post as well. 
 
 3.search calories of food 
 
@@ -58,5 +58,29 @@ In the home page, of your right hand side, we have a list to show your total dai
 
 4.share new post 
 
-In this page, you can choose an image from you device and write a caption for your post. Press share you will go back the home page and see you post there.
-    
+In this page, you can choose an image from you device and write a caption for your post. Press share you will go back the home page and see you post there (which implements the create operation of crud of the post model).If the calories you have consumed are less than the minimum calories intake per meal according to your goal, the top right hand corner of your latest post will says unhealthy. If your calories intake within your minimum and maximum intake per meal , the system will said that it is healthy.Else, the system said fat.
+
+5.user profile 
+To update and delete posts and user information, you have to press the button with your avatar on the top right hand corner and go to the user profile page. There you can edit your avatar, caption and delete your account( which has implement update and delete operation of crud of user model and delete operation of post and body's data as well.As once the user account is deleted,all the posts and body information of user will be deleted). For posts, it shows all the post you have shared(which implement read operation) , you can update their image and caption or delete it(which implements update abd delete operation of post.
+
+6.update body information 
+
+If you want to update your body information, you can press the body information button on the left hand side of your home page and you can see your current data. Then you can change each data field directly, press submit and your data is updated (which implement read and update operation of body's data).
+
+7.logout 
+To logout, there is a button on left bottom corner in the home page.Press it then you are good to go.
+
+# Resful CRUD service
+The restful crud service are focusing on operation of post 
+
+1.create 
+user have to input the username, calories and caption of their post 
+
+2.read
+user have to input the username and it displays a list of posts that user has shared 
+
+3.update 
+user have to fill in the post id, in the request body, fill in the calories and caption content that would like to update 
+
+4.Delete
+user have to fill in the post id only and the operation will success 
