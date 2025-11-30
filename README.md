@@ -30,3 +30,10 @@ mongoose: for using ODM in this project
 multer: for uploading images 
 
 oauth: for authentication using the fatsecret api
+
+# public
+in the public folder,it stores the css, and images which is used in the project.And there are two folders for image storage within the uploads folder in the public folder,one is image and one is avatar.
+# views
+inside the views folder their are 10 files. welcome.ejs is the first page when user reach , then we have register.ejs and login.ejs for the register and login page .Next is the bodyinfoForm and main.ejs . bodyinfoForm is a page for user to input their body information.And the main page is the page which user can see other user's post newPost.ejs is for user the share new post , searchFood.ejs is for user to search calories of food. bodyinfo.ejs is similar to bodyinfoForm, but it focus on display and update user's body information instead of create a new one.userProfile.ejs is for displaying data of user and posts they have shared and lastly, the editProfile is for editing user data.
+# model
+#
