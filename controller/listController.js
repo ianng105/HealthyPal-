@@ -1,7 +1,7 @@
 exports.add= (req, res) => {
   const { food_name, calories, serving_description, quantity } = req.body;
   if (!food_name || calories === undefined) {
-    return res.status(400).send('缺少必要字段');
+    return res.status(400).send('invaild input');
   }
   if (!req.session.eatenList) req.session.eatenList = [];
   req.session.eatenList.push({
@@ -14,7 +14,7 @@ exports.add= (req, res) => {
   res.redirect('back');
 };
 
-// 从已吃列表移除食物
+
 exports.remove=(req, res) => {
   const { id } = req.body;
   if (req.session.eatenList) {
@@ -23,7 +23,7 @@ exports.remove=(req, res) => {
   res.redirect('back');
 };
 
-// 查看已吃列表（调试用）
+
 exports.show=(req, res) => {
   const list = req.session.eatenList || [];
   const totalCalories = list.reduce((sum, item) => {
