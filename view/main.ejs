@@ -6,6 +6,7 @@
   <title>HealthyPal-gym share platform</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" href="/css/login-animation.css">
   <style>
     .content {
       margin-left: 180px; /* 与侧边栏宽度一致 */
@@ -247,6 +248,11 @@ white-space: pre-wrap;
   </style>
 </head>
 <body>
+    <!-- 过渡动画容器 -->
+    <div id="transition-animation" class="healthy-pal-landing-container">
+      <div class="healthy-pal-title">Healthy Pal</div>
+    </div>
+<div id="main-content" style="display:none;">
   <a href="/userProfile" class="floating-profile-btn" title="Profile">
   <!-- 使用用户头像 头像替换默认图标 -->
     <img 
@@ -398,8 +404,13 @@ white-space: pre-wrap;
 
    </section>
  </aside>
-
-       
+</div>
+   <script>
+        setTimeout(function() {
+          document.getElementById('transition-animation').style.display = 'none';
+          document.getElementById('main-content').style.display = '';
+        }, 3000); // 3秒动画后切换
+      </script>
 
 </body>
 </html>
