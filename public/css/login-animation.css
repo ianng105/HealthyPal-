@@ -1,0 +1,271 @@
+/* 根变量：统一调节动效时长/发光强度/透明度 */
+:root {
+  --hp-bg: #1976ff;               /* 主蓝色，保留 */
+  --hp-text: #ffffff;             /* 文字白色 */
+  --hp-accent: #7fb3ff;           /* 辅助高光（更浅的蓝） */
+  --hp-glow: rgba(255,255,255,0.65);
+  --hp-duration-in: 900ms;
+  --hp-duration-hold: 900ms;
+  --hp-duration-out: 900ms;
+  --hp-ease: cubic-bezier(.19,1,.22,1);
+  --hp-particle-count: 28;
+}
+
+/* 容器 */
+.healthy-pal-landing-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--hp-bg);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 9999;
+  overflow: hidden;
+  isolation: isolate; /* 让背景滤镜只作用于内部 */
+}
+
+/* 背景光束（对角线渐变） */
+.healthy-pal-landing-container::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.12), transparent 60%),
+    radial-gradient(800px 400px at 90% 80%, rgba(255,255,255,0.10), transparent 70%),
+    linear-gradient(115deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 40%),
+    linear-gradient(295deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 45%);
+  filter: saturate(110%);
+  mix-blend-mode: screen;
+  transform: translate3d(0,0,0);
+  animation: hp-sheen 5.5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 背景柔光流动层 */
+.healthy-pal-landing-container::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(60% 60% at 70% 30%, rgba(255,255,255,0.10), transparent 70%);
+  filter: blur(30px);
+  opacity: 0.65;
+  transform: translate3d(0,0,0) rotate(0.001deg);
+  animation: hp-drift 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 标题主体 */
+.healthy-pal-title {
+  position: relative;
+  color: var(--hp-text);
+  font-size: 3.8rem;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  margin-left: 8vw;
+  line-height: 1.05;
+  opacity: 0;
+  transform: translate3d(-100%, 0, 0) skewX(-6deg);
+  text-shadow:
+    0 2px 14px rgba(0,0,0,0.25),
+    0 0 24px rgba(255,255,255,0.2);
+  z-index: 2;
+
+  /* 分段动画：滑入 → 停留 → 滑出 */
+  animation:
+    healthy-pal-slide-in var(--hp-duration-in) var(--hp-ease) forwards,
+    healthy-pal-stay var(--hp-duration-hold) calc(var(--hp-duration-in)) linear forwards,
+    healthy-pal-slide-out var(--hp-duration-out) calc(var(--hp-duration-in) + var(--hp-duration-hold)) var(--hp-ease) forwards;
+}
+
+/* 文字内部高光描边 */
+.healthy-pal-title::before {
+  content: attr(data-glow);
+  position: absolute;
+  inset: 0;
+  color: var(--hp-text);
+  filter: blur(6px);
+  opacity: 0.45;
+  transform: translateZ(0);
+  z-index: -1;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* 下划线光流条 */
+.healthy-pal-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.3em;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--hp-glow), rgba(255,255,255,0));
+  box-shadow: 0 0 16px rgba(255,255,255,0.6);
+  border-radius: 999px;
+  animation:
+    hp-underline-in var(--hp-duration-in) var(--hp-ease) forwards,
+    hp-underline-out var(--hp-duration-out) calc(var(--hp-duration-in) + var(--hp-duration-hold)) var(--hp-ease) forwards;
+}
+
+/* 可选副标题（白字轻量） */
+.healthy-pal-subtitle {
+  color: rgba(255,255,255,0.9);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-left: 8vw;
+  margin-top: 1rem;
+  opacity: 0;
+  transform: translate3d(-30%, 0, 0);
+  z-index: 2;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+
+  animation:
+    hp-sub-in calc(var(--hp-duration-in) * 0.85) ease forwards calc(var(--hp-duration-in) * 0.35),
+    hp-sub-stay var(--hp-duration-hold) linear forwards calc(var(--hp-duration-in) + 150ms),
+    hp-sub-out var(--hp-duration-out) var(--hp-ease) forwards calc(var(--hp-duration-in) + var(--hp-duration-hold));
+}
+
+/* 粒子容器（可选：在 HTML 中添加 <div class="healthy-pal-particles"></div>） */
+.healthy-pal-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* 粒子元素（可通过 JS 动态生成，也可手动放多个 span） */
+.healthy-pal-particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle at 30% 30%, var(--hp-text), rgba(255,255,255,0.1));
+  border-radius: 50%;
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.6),
+    0 0 18px rgba(255,255,255,0.35);
+  opacity: 0;
+  animation: hp-float 6s linear infinite;
+  filter: saturate(120%);
+  mix-blend-mode: screen;
+}
+
+/* 不同粒子的延迟和尺寸可通过 nth-child 调整 */
+.healthy-pal-particles span:nth-child(odd) {
+  width: 4px; height: 4px; animation-duration: 5.2s;
+}
+.healthy-pal-particles span:nth-child(3n) {
+  width: 8px; height: 8px; animation-duration: 6.8s;
+  opacity: 0.85;
+}
+
+/* 关键帧：文字滑入、停留、滑出（保留你原意并增强） */
+@keyframes healthy-pal-slide-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0) skewX(-6deg) scale(0.98);
+    filter: blur(6px);
+  }
+  60% { filter: blur(0px); }
+  100% {
+    opacity: 1;
+    transform: translate3d(0%, 0, 0) skewX(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes healthy-pal-stay {
+  0% {
+    opacity: 1;
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+@keyframes healthy-pal-slide-out {
+  0% {
+    opacity: 1;
+    transform: translate3d(0%, 0, 0) skewX(0deg) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0) skewX(-4deg) scale(0.98);
+    filter: blur(4px);
+  }
+}
+
+/* 背景动画关键帧 */
+@keyframes hp-sheen {
+  0% { transform: translate3d(-2%, -2%, 0) rotate(0.001deg); opacity: 0.8; }
+  100% { transform: translate3d(2%, 2%, 0) rotate(0.001deg); opacity: 1; }
+}
+@keyframes hp-drift {
+  0% { transform: translate3d(-2%, 1%, 0) scale(1); opacity: 0.55; }
+  100% { transform: translate3d(2%, -1%, 0) scale(1.03); opacity: 0.75; }
+}
+
+/* 下划线动画 */
+@keyframes hp-underline-in {
+  0% { width: 0%; opacity: 0; }
+  100% { width: 64%; opacity: 1; }
+}
+@keyframes hp-underline-out {
+  0% { width: 64%; opacity: 1; }
+  100% { width: 0%; opacity: 0; }
+}
+
+/* 副标题动画 */
+@keyframes hp-sub-in {
+  0% { opacity: 0; transform: translate3d(-30%, 0, 0); filter: blur(6px); }
+  100% { opacity: 1; transform: translate3d(0%, 0, 0); filter: blur(0); }
+}
+@keyframes hp-sub-stay {
+  0% { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes hp-sub-out {
+  0% { opacity: 1; transform: translate3d(0%, 0, 0); filter: blur(0); }
+  100% { opacity: 0; transform: translate3d(-20%, 0, 0); filter: blur(4px); }
+}
+
+/* 粒子漂浮关键帧（从左到右，带轻微上下起伏） */
+@keyframes hp-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(-10vw, 60vh, 0) scale(0.9);
+  }
+  10% { opacity: 1; }
+  50% {
+    transform: translate3d(50vw, 30vh, 0) scale(1);
+  }
+  90% { opacity: 0.9; }
+  100% {
+    opacity: 0;
+    transform: translate3d(110vw, -10vh, 0) scale(1.1);
+  }
+}
+
+/* 响应式：在小屏幕上缩小字号与间距 */
+@media (max-width: 768px) {
+  .healthy-pal-title {
+    font-size: 2.4rem;
+    letter-spacing: 1.2px;
+    margin-left: 6vw;
+  }
+  .healthy-pal-subtitle {
+    font-size: 0.95rem;
+    margin-left: 6vw;
+  }
+  .healthy-pal-particles span {
+    transform: translate3d(-20vw, 70vh, 0);
+  }
+}
