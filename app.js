@@ -102,27 +102,33 @@ app.use(session({
 }));
 
 // 从 fatSecret 搜索食物卡路里
-app.get('/searchCalories', (req, res) => {
+app.get('/searchCalories', async(req, res) => {
   const apiUrl = `https://platform.fatsecret.com/rest/foods/search/v4?search_expression=${req.query.foodInput}&format=json&include_sub_categories=true&flag_default_serving=true&include_food_attributes=true&include_food_images=false&max_results=10&language=en&region=US&page_number=0`;
 
   oa.get(
     apiUrl,
     accessToken,
     tokenSecret,
-    (error, data, response) => {
+    async(error, data, response) => {
       if (error) {
         console.error('Error:', error);
         return res.status(500).json({ error: 'API request failed' });
       }
       const obj = JSON.parse(data);
       const foodArray = obj.foods_search.results.food;
+      let userBody = await Userbody.findUserBodyByUserId(req.session.userId);
+      const minimumIntake = userBody ? userBody.minimumIntake  : null;
+      const mIn=Math.round(minimumIntake/3);
+      const maximumIntake = userBody ? userBody.maximumIntake  : null;
+      const mAx=Math.round(maximumIntake/3);
       const eatenList = Array.isArray(req.session.eatenList) ? req.session.eatenList : [];
       const totalCalories = eatenList.reduce((sum, it) => {
         const c = Number(it.calories) || 0;
         const q = Number(it.quantity) || 1;
         return sum + c * q;
       }, 0);
-      res.render('searchFood', { foodarray: foodArray, eatenList, totalCalories });
+      
+      res.render('searchFood', { foodarray: foodArray, eatenList, totalCalories,mIn,mAx });
     }
   );
 });
@@ -155,14 +161,19 @@ app.get('/register', (req, res) => {
 });
 
 // 搜索食物页面
-app.get('/searchFood', (req, res) => {
+app.get('/searchFood', async(req, res) => {
   const eatenList = Array.isArray(req.session.eatenList) ? req.session.eatenList : [];
   const totalCalories = eatenList.reduce((sum, it) => {
     const c = Number(it.calories) || 0;
     const q = Number(it.quantity) || 1;
     return sum + c * q;
   }, 0);
-  res.render('searchFood', { foodarray: [], eatenList, totalCalories });
+  let userBody = await Userbody.findUserBodyByUserId(req.session.userId);
+  const minimumIntake = userBody ? userBody.minimumIntake : null;
+  const mIn=Math.round(minimumIntake/3);
+  const maximumIntake = userBody ? userBody.maximumIntake: null;
+  const mAx=Math.round(maximumIntake/3);
+  res.render('searchFood', { foodarray: [], eatenList, totalCalories,mIn,mAx});
 });
 
 // 新建帖子页面
