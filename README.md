@@ -1,5 +1,5 @@
 # HealthyPal
-We are group 7(13170500 Ng Man Yau Ian)our project name is HealthyPal.
+We are group 7(13170500 Ng Man Yau Ian, 13419518 Wang Yusen, 13411810 Li Yang, 13385340 Wnag Ruizhi)our project name is HealthyPal.
 HealthyPal is a diet, social media application.Users can check the calories of their meal and share it with others who are dieting as well.
 We build a community of diet,to encourage and alert each other.
 
@@ -31,8 +31,24 @@ multer: for uploading images
 
 oauth: for authentication using the fatsecret api
 
+# controller
+There are totally 6 controller files in our project, these 6 controllers can effectively reduce the error which caused by multiple teammates modifying the same file and easier for manage.
+
+1.accountController:
+it focus on crud operations of user account e.g. register, update, delete
+
+2.authenticationController:
+it focus on user login and logout
+
+3.calculatorController:
+it focus on functions which calculate TDEE and BMR in the bodyinfoForm.ejs and bodyinfo.ejs
+
+4.listController:
+it focus on fucntions controlling the food list of food you have eaten
+
 # public
 in the public folder,it stores the css, and images which is used in the project.And there are two folders for image storage within the uploads folder in the public folder,one is image and one is avatar.
+
 # views
 inside the views folder their are 10 files. welcome.ejs is the first page when user reach , then we have register.ejs and login.ejs for the register and login page .Next is the bodyinfoForm and main.ejs . bodyinfoForm is a page for user to input their body information.And the main page is the page which user can see other user's post newPost.ejs is for user the share new post , searchFood.ejs is for user to search calories of food. bodyinfo.ejs is similar to bodyinfoForm, but it focus on display and update user's body information instead of create a new one.userProfile.ejs is for displaying data of user and posts they have shared and lastly, the editProfile is for editing user data.
 
@@ -42,7 +58,7 @@ we have totally 4 models in our project.The first one is user.js, the second one
 # Operation guide 
 1.login/registration 
 
-if you are new to this app, you can use register to create a new account in this app(for registration, you have to input a unique username, email and a safe password)which implement the create operation of crud of user. If you have used our app before you can use your email and password to login.
+if you are new to this app, you can use register to create a new account in this app(for registration, you have to input a unique username, email and a safe password)(which implement the create operation of crud of user). If you have used our app before you can use your email and password to login.
 
 1.5 body information
 
@@ -54,7 +70,7 @@ information, is our home page. Here you can see other users share their meal,how
 
 3.search calories of food 
 
-In the home page, of your right hand side, we have a list to show your total daily calories and what you have eaten.Then you have to press the add button and you will go to the search food page. Here you have to first fill in what food you have eaten into the input bar (one food each time) and press search. Then we will provide you choices for you to choose which food is closer to what you eat. You can press up button to increase the quantity and add button to add its calories to the total calories. Then you can press share.
+In the home page, of your right hand side, we have a list to show your total daily calories and what you have eaten.Then you have to press the "go to add" button and you will go to the search food page. Here you have to first fill in what food you have eaten into the input bar (one food each time) and press search. Then we will provide you choices for you to choose which food is closer to what you eat. You can press up button to increase the quantity and add button to add its calories to the total calories. Then you can press share.
 
 4.share new post 
 
