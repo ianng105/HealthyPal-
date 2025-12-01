@@ -8,7 +8,7 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.06);
       padding: 24px;
       max-width: 860px;
-      margin: 0 auto;
+      margin-left:180px;
     }
     .card-header {
       display: flex;

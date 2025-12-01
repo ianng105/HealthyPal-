@@ -3,11 +3,7 @@
     --brand:#3b82f6; --brand-dark:#2563eb; --danger:#ef4444;
   }
   html,body{height:100%}
-  body {
-    min-height: 100vh;
-    background: #faf8f8 !important;
-    padding: 1.5rem;
-}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Microsoft YaHei",sans-serif;}
 
   /* 页面整体三列：左侧记录饮食 rail | 中间搜索 | 右侧结果 */
   .page{
@@ -480,32 +476,23 @@
   }
 
   .nav-btn {
-    background:#e5e7eb;
+    background:#fff;               /* 白底 */
+    color:var(--brand);            /* 蓝字 */
+    border:2px solid var(--brand); /* 有边框更像“线性按钮” */
+    box-shadow:0 10px 24px rgba(10,102,255,.08);;
     padding:6px 10px;
     border-radius:6px;
     font-size:14px;
     font-weight:500;
     text-decoration:none;
-    color:#333;
+ 
   }
   .nav-btn:hover {
-    background:#d1d5db;
+    background:var(--brand);       /* 变成蓝底 */
+    color:#fff;                    /* 白字 */
+    box-shadow:0 16px 32px rgba(10,102,255,.35);
+    transform:translateY(-1px);
   }
-  .nav-btn {
-    background: #2D8CFF;
-    color: white !important;
-    padding: 6px 14px;
-    border-radius: 10px;
-    font-weight: bold;
-    display: inline-block;
-    text-decoration: none;
-    box-shadow: 0 3px 8px rgba(45,140,255,0.4);
-    transition: 0.2s;
-}
-
-.nav-btn:hover {
-    background: #1f6ed9;
-}
 
 .food-record-card {
   background: white;
