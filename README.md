@@ -46,6 +46,12 @@ it focus on functions which calculate TDEE and BMR in the bodyinfoForm.ejs and b
 4.listController:
 it focus on fucntions controlling the food list of food you have eaten
 
+5.postController:
+it focus on post operation 
+
+6.restfulController:
+it store the body of restful services functions
+
 # public
 in the public folder,it stores the css, and images which is used in the project.And there are two folders for image storage within the uploads folder in the public folder,one is image and one is avatar.
 
