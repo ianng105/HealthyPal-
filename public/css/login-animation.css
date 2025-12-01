@@ -4,9 +4,9 @@
   --hp-text: #ffffff;             /* 文字白色 */
   --hp-accent: #7fb3ff;           /* 辅助高光（更浅的蓝） */
   --hp-glow: rgba(255,255,255,0.65);
-  --hp-duration-in: 900ms;
-  --hp-duration-hold: 900ms;
-  --hp-duration-out: 900ms;
+  --hp-duration-in: 500ms;
+  --hp-duration-hold: 500ms;
+  --hp-duration-out: 500ms;
   --hp-ease: cubic-bezier(.19,1,.22,1);
   --hp-particle-count: 28;
 }
@@ -126,7 +126,7 @@
 
   animation:
     hp-sub-in calc(var(--hp-duration-in) * 0.85) ease forwards calc(var(--hp-duration-in) * 0.35),
-    hp-sub-stay var(--hp-duration-hold) linear forwards calc(var(--hp-duration-in) + 150ms),
+    hp-sub-stay var(--hp-duration-hold) linear forwards calc(var(--hp-duration-in) ),
     hp-sub-out var(--hp-duration-out) var(--hp-ease) forwards calc(var(--hp-duration-in) + var(--hp-duration-hold));
 }
 
