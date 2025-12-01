@@ -6,6 +6,7 @@
   <title>HealthyPal-gym share platform</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/css/main.css"/>
+  <link rel="stylesheet" href="/css/welcome.css"/>
   <link rel="stylesheet" href="/css/login-animation.css">
   <style>
     .content {
@@ -97,12 +98,12 @@ text-decoration: none;
     .btn-secondary:hover{
       background:#dfe3e8;
     }
-    .btn-primary{
+    .btnprimary{
       background:var(--primary);
       color:#fff;
-      box-shadow: 0 6px 14px rgba(59,130,246,.25);
+      box-shadow: 0 6px 14px rgba(0,0,0,0);
     }
-    .btn-primary:hover{ background:var(--primary-dark); }
+    .btnprimary:hover{ background:var(--primary-dark); box-shadow: 10px 10px;}
 
     /* 右上角圆形按钮 */
     .floating-profile-btn {
@@ -248,13 +249,11 @@ white-space: pre-wrap;
   </style>
 </head>
 <body>
-    <!-- 过渡动画容器 -->
     <div id="transition-animation" class="healthy-pal-landing-container">
       <div class="healthy-pal-title">Healthy Pal</div>
     </div>
-<div id="main-content" style="display:none;">
+   <div id="main-content" style="display:none;">
   <a href="/userProfile" class="floating-profile-btn" title="Profile">
-  <!-- 使用用户头像 头像替换默认图标 -->
     <img 
       src="<%= currentUser.avatar || '/uploads/avatars/defaulticon.jpeg' %>" 
       alt="Profile" 
@@ -266,7 +265,7 @@ white-space: pre-wrap;
   <aside class="sidebar">
     <div class="brand">
   <% if (typeof displayName !== 'undefined' && displayName) { %>
-    <strong>Hi <%= username %>, welcome to HealthyPal</strong>
+    <strong>Hi <%= username %> !</strong>
   <% } else { %>
     HealthyPal
   <% } %>
@@ -293,6 +292,9 @@ white-space: pre-wrap;
 
   <!-- 中间内容：帖子流（依据你提供的模板结构渲染） -->
   <main class="content">
+  <div class="brand">
+  	<div class="logo">HealthyPal</div>
+  </div
     <section class="feed">
       <% if (posts && posts.length > 0) { %>
         <% posts.forEach(post => { %>
@@ -404,13 +406,15 @@ white-space: pre-wrap;
 
    </section>
  </aside>
-</div>
    <script>
         setTimeout(function() {
           document.getElementById('transition-animation').style.display = 'none';
           document.getElementById('main-content').style.display = '';
-        }, 3000); // 3秒动画后切换
+        }, 1500); // 3秒动画后切换
+
+
       </script>
+       
 
 </body>
 </html>
