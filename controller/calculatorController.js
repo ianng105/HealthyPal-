@@ -4,7 +4,7 @@ const Userbody = require('../model/userbody');
 exports.submit=async (req, res) => {
   const username = req.session.username;
   if (!username) {
-    return res.status(400).send('无法识别用户，请重新注册');
+    return res.status(400).send('cannot regonize user, please sign up again);
   }
   try {
     const { height, weight, gender, birthday, activity, goal } = req.body;
@@ -41,8 +41,8 @@ exports.submit=async (req, res) => {
     await Userbody.createUserBody(bodyInfo);
     res.redirect('/main');
   } catch (err) {
-    console.error('保存身体信息失败:', err);
-    res.status(500).send('保存失败，请重试');
+    console.error('body information storage failed:', err);
+    res.status(500).send('saving failed, try again');
   }
 };
 
@@ -54,10 +54,9 @@ exports.update = async (req, res) => {
   const userId = req.session.userId;
 
   try {
-    // 1. 取出用户真正能改的6个字段
+  
     const { height, weight, gender, birthday, activityLevel, goal } = req.body;
 
-    // 2. 计算年龄（你原来就有的函数）
     const getAge = (birthDate) => {
       if (!birthDate) return null;
       const today = new Date();
@@ -70,7 +69,7 @@ exports.update = async (req, res) => {
 
     const age = birthday ? getAge(birthday) : null;
 
-    // 3. 计算 BMR 和 TDEE（你原来就有的函数，直接用）
+    // TDEE calculation
     let TDEE = null;
     let maximumIntake = null;
     let minimumIntake = null;
@@ -103,7 +102,7 @@ exports.update = async (req, res) => {
       }
     }
 
-    // 4. 构造干净的要保存的数据（这三个是我们算好的！）
+   
     const dataToSave = {
       height: height ? Number(height) : null,
       weight: weight ? Number(weight) : null,
@@ -116,7 +115,7 @@ exports.update = async (req, res) => {
       minimumIntake
     };
 
-    // 5. 保存或更新
+ 
     const existing = await Userbody.findUserBodyByUserId(userId);
     if (existing) {
       await Userbody.updateUserBody(userId, dataToSave);
@@ -126,15 +125,15 @@ exports.update = async (req, res) => {
 
     res.redirect('/bodyInfo');
   } catch (err) {
-    console.error('保存体测数据失败:', err);
-    res.status(500).send('保存失败，请重试');
+    console.error('saving failed:', err);
+    res.status(500).send('Error, please try again');
   }
 };
 
 
 
 
-// 营养计算工具函数
+//calculate age
 function getAgeFromDOB(dob) {
   if (!dob) return null;
   const birth = new Date(dob);
@@ -146,6 +145,7 @@ function getAgeFromDOB(dob) {
   return age;
 }
 
+//BMR calculation
 function calculateBMR({ gender, height, weight, birthday }) {
   const age = getAgeFromDOB(birthday);
   if (typeof height !== 'number' || !isFinite(height) || height <= 0 ||
@@ -160,6 +160,7 @@ function calculateBMR({ gender, height, weight, birthday }) {
   return 447.593 + 9.247 * weight + 3.098 * height - 4.330 * age;
 }
 
+//TDEE calculation
 function calculateTDEE(bmr, activity) {
   if (typeof bmr !== 'number' || !isFinite(bmr) || bmr <= 0) return null;
   const factors = {
@@ -173,4 +174,5 @@ function calculateTDEE(bmr, activity) {
   if (!factor) return null;
   return bmr * factor;
 }
+
 
