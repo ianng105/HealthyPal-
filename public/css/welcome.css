@@ -367,17 +367,17 @@ body{
 /* ===== 主按钮：默认白底蓝字，悬浮蓝底白字 ===== */
 
 .btn-primary{
-  background:#fff;               /* 白底 */
-  color:var(--brand);            /* 蓝字 */
-  border:2px solid var(--brand); /* 有边框更像“线性按钮” */
+  background:#fff;            
+  color:var(--brand);            
+  border:2px solid var(--brand);
   box-shadow:0 10px 24px rgba(10,102,255,.08);
 }
 
 .btn-primary:hover{
-  background:var(--brand);       /* 变成蓝底 */
-  color:#fff;                    /* 白字 */
+  background:var(--brand);      
+  color:#fff;                 
   box-shadow:0 16px 32px rgba(10,102,255,.35);
-  transform:translateY(-1px);    /* 轻微上浮 */
+  transform:translateY(-1px);   
 }
 
 .btn-primary:active{
@@ -388,7 +388,7 @@ body{
 /* ===== 链接按钮：同样的交互逻辑（可选） ===== */
 
 .btn-link{
-  background:#fff;               /* 默认也改成白底蓝字 */
+  background:#fff;               
   color:var(--brand);
   text-align:center;
   font-weight:700;
