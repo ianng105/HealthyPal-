@@ -4,7 +4,7 @@ const Userbody = require('../model/userbody');
 exports.submit=async (req, res) => {
   const username = req.session.username;
   if (!username) {
-    return res.status(400).send('cannot regonize user, please sign up again);
+    return res.status(400).send('cannot regonize user, please sign up again');
   }
   try {
     const { height, weight, gender, birthday, activity, goal } = req.body;
@@ -174,5 +174,6 @@ function calculateTDEE(bmr, activity) {
   if (!factor) return null;
   return bmr * factor;
 }
+
 
 
