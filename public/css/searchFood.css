@@ -1,0 +1,70 @@
+:root{
+    --bg:#f7f8fb; --card:#fff; --line:#eef0f3; --text:#111827; --muted:#6b7280;
+    --brand:#3b82f6; --brand-dark:#2563eb; --danger:#ef4444;
+  }
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Microsoft YaHei",sans-serif;}
+
+  /* 页面整体三列：左侧记录饮食 rail | 中间搜索 | 右侧结果 */
+  .page{
+    display:grid;
+    grid-template-columns: 440px 580px 1fr;
+    gap:200px;
+    padding:10px;
+    min-height:100%;
+    align-items:start;
+  }
+
+  .rail{
+    position:sticky; top:12px; align-self:start;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px;
+  }
+  .title{margin:0 0 8px;font-size:18px;font-weight:800;}
+  .muted{color:var(--muted);font-size:12.5px}
+
+  /* 左侧购物车列表 */
+  .list{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto;padding-right:4px;}
+  .diet-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff;}
+  .diet-name{font-weight:700;font-size:13.5px;margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* 中间搜索面板 */
+  .search-panel{
+    position:sticky; top:12px; align-self:start;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px;
+  }
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .search-input{flex:1;min-width:160px;padding:10px;border:1px solid var(--line);border-radius:8px}
+
+  /* 右侧结果列表 */
+  .result-list{display:flex;flex-direction:column;gap:10px;}
+  .result{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;}
+
+  .btn{appearance:none;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:8px;
+    padding:8px 12px;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+    
+  text-decoration: none;}
+  .btn:hover{
+  color: #0056d6; 
+}
+  .btn-primary{border-color:transparent;background:var(--brand);color:#fff}
+  .btn-primary:hover{border-color:var(--brand);background:#fff;color:var(--brand)}
+  .btn-danger{border-color:#f2c6c6;background:#fff;color:var(--danger)}
+  .btn-danger:hover{border-color:transparent;background:var(--danger);color:#fff}
+  
+  input[type="number"]{width:72px;padding:8px;border:1px solid var(--line);border-radius:8px}
+
+  /* 窄屏响应式：改为上下排 */
+  @media (max-width: 1100px){
+    .page{grid-template-columns: 280px 1fr;}
+    .result-list{grid-column: 1 / -1;}
+  }
+  @media (max-width: 800px){
+    .page{grid-template-columns: 1fr;}
+    .rail, .search-panel{position:static}
+  }
