@@ -43,7 +43,7 @@ exports.createPost=(uploadPost)=async (req, res) => {
       avatar,
       image: req.file ? '/uploads/images/'+req.file.filename : null,
       caption: typeof caption == 'string' ? caption : '',
-      eatenListSnapshot: eatenList,              // 可选
+      eatenListSnapshot: eatenList,   
       totalCaloriesSnapshot: totalCalories,    
       healthyJudge:healthyJudge,
       date: new Date()
@@ -51,11 +51,10 @@ exports.createPost=(uploadPost)=async (req, res) => {
 
     await Post.createPost(postData);
 	console.log(postData.iamge);
-    // 发帖成功后跳转主页
     return res.redirect('/main');
   } catch (err) {
-    console.error('发布帖子失败:', err);
-    return res.status(500).send('发布失败，请重试');
+    console.error('share error:', err);
+    return res.status(500).send('error, try again');
   }
 };
 //======================update post==============================//
@@ -67,7 +66,7 @@ exports.update=(uploadPost)=async (req, res) => {
     const post = await Post.findPostById(postId);
 
     if (!post || post.username !== req.session.username) {
-      return res.status(403).send("无权限编辑该帖子");
+      return res.status(403).send("no permission to edit this post");
     }
 
     const updateData = {
@@ -82,8 +81,8 @@ exports.update=(uploadPost)=async (req, res) => {
 
     return res.redirect('/userProfile');
   } catch (err) {
-    console.error("更新帖子失败:", err);
-    res.status(500).send("帖子更新失败，请重试");
+    console.error("update failed:", err);
+    res.status(500).send("error, try again");
   }
 };
 
@@ -96,7 +95,7 @@ exports.edit= async (req, res) => {
   const post = await Post.findPostById(postId);
 
   if (!post || post.username !== req.session.username) {
-    return res.status(403).send("无权限编辑该帖子");
+    return res.status(403).send("you have no permission to edit this post");
   }
 
   res.render('newPost', {
@@ -115,15 +114,15 @@ exports.display= async (req, res) => {
     const rawPosts = await Post.findAllPosts();
     const posts = rawPosts.map(p => ({
       ...p,
-      user: { username: p.username || '匿名用户' },
+      user: { username: p.username || 'unknown' },
       avatar:p.avatar,
       image: p.image || null,
       caption: typeof p.caption === 'string' ? p.caption : '',
       healthyJudge:p.healthyJudge
     }));
-    // 新增：从数据库获取当前用户的完整信息
+
     const currentUser = await User.findUserByUsername(req.session.username);
-    const displayName = req.session.username || '用户';
+    const displayName = req.session.username || 'user';
     const eatenList = Array.isArray(req.session.eatenList) ? req.session.eatenList : [];
     const totalCalories = eatenList.reduce((sum, it) => {
       const c = Number(it.calories) || 0;
@@ -133,8 +132,8 @@ exports.display= async (req, res) => {
     const username = req.session.username;
     res.render('main', { posts, displayName, eatenList, totalCalories, currentUser,username});
   } catch (err) {
-    console.error('加载帖子失败:', err);
-    res.status(500).send('服务器错误，无法加载帖子');
+    console.error('loading failed:', err);
+    res.status(500).send('server error,fail to load');
   }
 };
 
@@ -147,7 +146,7 @@ exports.Delete=async (req, res) => {
 
     const postId = req.params.id;
 
-    // 调用 controller 检查权限并删除
+
     const post = await Post.findPostById(postId);
     if (!post) {
       return res.redirect('/userProfile?error=notfound');
@@ -162,7 +161,7 @@ exports.Delete=async (req, res) => {
     return res.redirect('/userProfile?success=deleted');
 
   } catch (err) {
-    console.error('删除帖子失败:', err);
+    console.error('delete error:', err);
     return res.redirect('/userProfile?error=server');
   }
 };
@@ -172,11 +171,11 @@ exports.Delete=async (req, res) => {
 
 exports.updateOwnPost = async (req, res) => {
   try {
-    // 从会话获取当前登录用户信息
+
     const currentUserId = req.session.userId;
     const currentUsername = req.session.username;
     
-    // 验证用户是否登录
+
     if (!currentUserId || !currentUsername) {
       return res.status(401).json({ 
         success: false, 
@@ -184,115 +183,106 @@ exports.updateOwnPost = async (req, res) => {
       });
     }
 
-    // 获取请求参数
-    const { id } = req.params; // 帖子ID
-    const { caption, image } = req.body; // 要更新的内容（ caption 为帖子文字内容，image 为可选图片地址）
+    const { id } = req.params; 
+    const { caption, image } = req.body; 
 
-    // 验证帖子是否存在
     const post = await Post.findPostById(id);
     if (!post) {
       return res.status(404).json({ 
         success: false, 
-        message: '帖子不存在' 
+        message: 'post not exists' 
       });
     }
-
-    // 验证是否为帖子作者（通过用户名匹配）
     if (post.username !== currentUsername) {
       return res.status(403).json({ 
         success: false, 
-        message: '没有权限修改此帖子' 
+        message: 'you have no permission to edit this post' 
       });
     }
 
-    // 准备更新数据（仅更新提供的字段，添加修改时间）
+
     const updateData = {};
     if (caption !== undefined) updateData.caption = caption;
     if (image !== undefined) updateData.image = image;
-    updateData.updatedAt = new Date(); // 记录修改时间
+    updateData.updatedAt = new Date();
 
-    // 执行更新操作
+
     const updateResult = await Post.updatePost(id, updateData);
     if (updateResult) {
       return res.status(200).json({ 
         success: true, 
-        message: '帖子更新成功',
+        message: 'post update success',
         postId: id 
       });
     } else {
       return res.status(500).json({ 
         success: false, 
-        message: '更新失败，请重试' 
+        message: 'update failed,try again' 
       });
     }
 
   } catch (error) {
-    console.error('修改帖子失败:', error);
+    console.error('edit failed:', error);
     return res.status(500).json({ 
       success: false, 
-      message: '服务器错误，无法更新帖子' 
+      message: 'server error, cannot update ' 
     });
   }
 };
 
-/**
- * 删除用户自己的帖子
- * 仅帖子作者可删除，需验证登录状态和权限
- */
+
 exports.deleteOwnPost = async (req, res) => {
   try {
-    // 从会话获取当前登录用户信息
+
     const currentUserId = req.session.userId;
     const currentUsername = req.session.username;
     
-    // 验证用户是否登录
+
     if (!currentUserId || !currentUsername) {
       return res.status(401).json({ 
         success: false, 
-        message: '请先登录' 
+        message: 'Please login first' 
       });
     }
 
-    // 获取帖子ID
     const { id } = req.params;
 
-    // 验证帖子是否存在
     const post = await Post.findPostById(id);
     if (!post) {
       return res.status(404).json({ 
         success: false, 
-        message: '帖子不存在' 
+        message: 'post not exists' 
       });
     }
 
-    // 验证是否为帖子作者（通过用户名匹配）
+    
     if (post.username !== currentUsername) {
       return res.status(403).json({ 
         success: false, 
-        message: '没有权限删除此帖子' 
+        message: 'you have no permission to delete this post' 
       });
     }
 
-    // 执行删除操作
     const deleteResult = await Post.deletePost(id);
     if (deleteResult) {
       return res.status(200).json({ 
         success: true, 
-        message: '帖子删除成功',
+        message: 'delete success',
         postId: id 
       });
     } else {
       return res.status(500).json({ 
         success: false, 
-        message: '删除失败，请重试' 
+        message: 'delete failed, try again' 
       });
     }
 
   } catch (error) {
-    console.error('删除帖子失败:', error);
+    console.error('delete failed:', error);
     return res.status(500).json({ 
       success: false, 
-      message: '服务器错误，无法删除帖子' 
+      message: 'server error, cannot delete this post' 
     });
   }
 };
+
