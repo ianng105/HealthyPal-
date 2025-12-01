@@ -17,7 +17,7 @@ exports.login= async (req, res) => {
     req.session.loggedIn = true;
     res.redirect('/main');
   } catch (error) {
-    console.error('登录错误:', error);
+    console.error('login error:', error);
     res.redirect('/login?error=server');
   }
 };
@@ -28,3 +28,4 @@ exports.logout = (req, res) => {
     res.redirect('/login');
   });
 };
+
