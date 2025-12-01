@@ -6,12 +6,12 @@ exports.register=async (req, res) => {
   try {
     const { email, password, username } = req.body;
     if (!email || !password || !username) {
-      return res.status(400).send('用户名、邮箱与密码必填');
+      return res.status(400).send('you must fill in your username, email and password');
     }
-    if (password.length < 10) return res.status(400).send('密码至少 10 位');
+    if (password.length < 10) return res.status(400).send('at least 10 digits is required');
     const exists = await User.findUserByUsername(username);
     if (exists) {
-      return res.status(400).send('用户名已存在');
+      return res.status(400).send('username exists');
     }
     const newUser=await User.createUser({ username, email, password });
     req.session.userId = newUser._id;
@@ -20,7 +20,7 @@ exports.register=async (req, res) => {
     req.session.loggedIn = true;
     return res.redirect('/bodyInfoForm');
   } catch (e) {
-    console.error("注册错误:", e);
+    console.error("registration error:", e);
     res.redirect('/register?error=1');
   }
 };
@@ -34,7 +34,7 @@ exports.update=(upload)= async (req, res) => {
     const username = req.session.username;
     const user = await User.findUserByUsername(username);
     if (!user) {
-      return res.status(404).send('用户不存在');
+      return res.status(404).send('user not exists');
     }
 
     // 更新用户基本信息
@@ -74,7 +74,7 @@ exports.update=(upload)= async (req, res) => {
     
     res.redirect('/userProfile?success=updated');
   } catch (err) {
-    console.error('更新资料失败:', err);
+    console.error('update failed:', err);
     res.redirect('/editProfile?error=server');
   }
 };
@@ -126,7 +126,7 @@ exports.edit=async (req, res) => {
   try {
     const user = await User.findUserByUsername(req.session.username);
     if (!user) {
-      return res.status(404).send('用户不存在');
+      return res.status(404).send('user not exists');
     }
     const userBody = await Userbody.findUserBodyByUserId(user._id);
     res.render('editProfile', {
@@ -146,8 +146,8 @@ exports.edit=async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('加载编辑页面失败:', err);
-    res.status(500).send('服务器错误');
+    console.error('page rendering failed:', err);
+    res.status(500).send('server error');
   }
 };
 //========================display in user profile==================//
@@ -158,14 +158,14 @@ exports.userProfile= async (req, res) => {
   try {
     const user = await User.findUserByUsername(req.session.username);
     if (!user) {
-      return res.status(404).send('用户不存在');
+      return res.status(404).send('user not exists');
     }
     const userBody = await Userbody.findUserBodyByUserId(user._id);
     const userProfileData = { ...user, ...userBody };
     const posts = await Post.findPostByUsername(req.session.username);
     res.render('userProfile', { user: userProfileData,posts });
   } catch (err) {
-    console.error('加载个人资料失败:', err);
-    res.status(500).send('服务器错误');
+    console.error('personal data failed :', err);
+    res.status(500).send('server error');
   }
 }
