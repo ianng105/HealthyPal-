@@ -54,8 +54,8 @@
 }
   .btn-primary{border-color:transparent;background:var(--brand);color:#fff}
   .btn-primary:hover{border-color:var(--brand);background:#fff;color:var(--brand)}
-  .btn-danger{border-color:#f2c6c6;background:#fff;color:var(--danger)}
-  .btn-danger:hover{border-color:transparent;background:var(--danger);color:#fff}
+  .btn-danger{border-color:transparent;background:var(--danger);color:#fff}
+  .btn-danger:hover{border-color:#f2c6c6;background:#fff;color:var(--danger)}
   
   input[type="number"]{width:72px;padding:8px;border:1px solid var(--line);border-radius:8px}
 

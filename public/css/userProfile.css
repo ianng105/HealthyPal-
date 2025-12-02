@@ -27,19 +27,22 @@
     .btn:hover{
       background:#f1f5f9;
     }
-    .btn-primary{ background: #ffffff;              /* 默认白底 */
-  color: var(--brand);              /* 蓝字 */
-  border: 2px solid var(--brand);   /* 蓝色边框 */
+    .btn-primary{
+    background: var(--brand);         /* Hover → 蓝底 */
+  color: #ffffff;                   /* Hover → 白字 */
+  border: 2px solid var(--brand); 
+       /* 蓝色边框 */
   transition: all 0.25s ease;}
     .btn-primary:hover{
-      background: var(--brand);         /* Hover → 蓝底 */
-  color: #ffffff;                   /* Hover → 白字 */
-  border: 2px solid var(--brand);   /* 蓝边维持 */
+    background: #ffffff;              /* 默认白底 */
+  color: var(--brand);              /* 蓝字 */
+  border: 2px solid var(--brand); 
+        /* 蓝边维持 */
   cursor: pointer;
     }
     .delete-btn {
-  background: #ffffff;
-  color: #ef4444;                 /* 红字 */
+ background: #ef4444;            /* 红底 */
+  color: #ffffff;                 /* 白字 */
   border: 2px solid #ef4444;      /* 红边 */
   padding: 8px 14px;
   border-radius: 10px;
@@ -48,9 +51,10 @@
   transition: all 0.25s ease;
 }
 .delete-btn:hover {
-  background: #ef4444;            /* 红底 */
-  color: #ffffff;                 /* 白字 */
-  border: 2px solid #ef4444;      /* 红边 */
+background: #ffffff;
+  color: #ef4444;                 /* 红字 */
+  border: 2px solid #ef4444;  
+       /* 红边 */
 }
 
     .danger{color:#ef4444}
