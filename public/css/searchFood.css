@@ -479,9 +479,9 @@
   }
 
   .nav-btn {
-    background:#fff;               /* 白底 */
-    color:var(--brand);            /* 蓝字 */
-    border:2px solid var(--brand); /* 有边框更像“线性按钮” */
+/* 有边框更像“线性按钮” */
+    background:var(--brand);       /* 变成蓝底 */
+    color:#fff;    
     box-shadow:0 10px 24px rgba(10,102,255,.08);;
     padding:6px 10px;
     border-radius:6px;
@@ -491,8 +491,10 @@
  
   }
   .nav-btn:hover {
-    background:var(--brand);       /* 变成蓝底 */
-    color:#fff;                    /* 白字 */
+      background:#fff;               /* 白底 */
+    color:var(--brand);            /* 蓝字 */
+    border:2px solid var(--brand); 
+                /* 白字 */
     box-shadow:0 16px 32px rgba(10,102,255,.35);
     transform:translateY(-1px);
   }

@@ -367,15 +367,16 @@ body{
 /* ===== 主按钮：默认白底蓝字，悬浮蓝底白字 ===== */
 
 .btn-primary{
-  background:#fff;            
-  color:var(--brand);            
-  border:2px solid var(--brand);
+background:var(--brand);      
+  color:#fff;                 
+  
   box-shadow:0 10px 24px rgba(10,102,255,.08);
 }
 
 .btn-primary:hover{
-  background:var(--brand);      
-  color:#fff;                 
+  background:#fff;            
+  color:var(--brand);            
+  border:2px solid var(--brand);
   box-shadow:0 16px 32px rgba(10,102,255,.35);
   transform:translateY(-1px);   
 }

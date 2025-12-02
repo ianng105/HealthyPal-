@@ -195,15 +195,15 @@ body{
 /* 主按钮：默认白底蓝字，悬浮蓝底白字 */
 
 .btn-primary{
-  background:#fff;                     /* 默认白底 */
-  color:var(--brand);                  /* 蓝字 */
-  border:2px solid var(--brand);       /* 蓝色描边 */
+  background:var(--brand);             /* 悬浮变蓝底 */
+  color:#fff;    
   box-shadow:0 8px 18px rgba(25,118,255,.12);
 }
 
 .btn-primary:hover{
-  background:var(--brand);             /* 悬浮变蓝底 */
-  color:#fff;                          /* 白字 */
+  background:#fff;                     /* 默认白底 */
+  color:var(--brand);                  /* 蓝字 */
+  border:2px solid var(--brand);                   /* 白字 */
   transform:translateY(-1px);
   box-shadow:0 14px 30px rgba(37,99,235,.32);
   border-color:var(--brand);

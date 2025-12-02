@@ -80,13 +80,27 @@
       cursor: pointer;
     }
     .btn-secondary {
-      background: #f3f4f6;
-      color: #374151;
+      background: #6b7280;          /* hover → 灰底 */
+    color: #ffffff;              /* 深灰字 */
+    border: 2px solid #6b7280;    /* 灰色边框 */
+    border-radius: 10px;
+    transition: all 0.2s ease; 
+    }
+    .btn-secondary:hover {
+    background: #ffffff;          /* 默认白底 */
+    color: #6b7280;               /* hover → 白字 */
+    border: 2px solid #6b7280;    /* 灰边维持 */
+    cursor: pointer;
     }
     .btn-primary {
       background: #3b82f6;
       color: #fff;
     }
+    .btn-primary:hover{ 
+     background:#fff;               /* 白底 */
+     color:#3b82f6;
+      border:2px solid #3b82f6; 
+        
     .btn:active { transform: translateY(1px); }
     @media (max-width: 900px) {
       .content { margin-left: 0; padding: 16px; }
