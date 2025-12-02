@@ -461,18 +461,21 @@
             }
         }
         .add-btn {
-    background: #2D8CFF;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 3px 8px rgba(45,140,255,0.4);
-    transition: 0.2s;
+     background:#fff;               /* 白底 */
+    color:var(--brand);            /* 蓝字 */
+    border:2px solid var(--brand); /* 有边框更像“线性按钮” */
+    box-shadow:0 10px 24px rgba(10,102,255,.08);;
+    padding:6px 10px;
+    border-radius:6px;
+    font-size:14px;
+    font-weight:500;
+    text-decoration:none;
   }
   .add-btn:hover {
-    background: #1f6ed9;
+    background:var(--brand);       /* 变成蓝底 */
+    color:#fff;                    /* 白字 */
+    box-shadow:0 16px 32px rgba(10,102,255,.35);
+    transform:translateY(-1px);
   }
 
   .nav-btn {
