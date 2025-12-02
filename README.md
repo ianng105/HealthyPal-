@@ -61,6 +61,9 @@ inside the views folder their are 10 files. welcome.ejs is the first page when u
 # model
 we have totally 4 models in our project.The first one is user.js, the second one is userbody.js,the third one is post.js and the last one is mongo.js. user and post is for doing crud operations on the user account and shared posts.userbody is for doing crud operations on the body information of user and the mongo one is for connection and use the database.
 
+# The cloud-based server URL
+https://serversideproject-2-lvy0.onrender.com/
+
 # Operation guide 
 1.login/registration 
 
