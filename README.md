@@ -1,5 +1,5 @@
 # HealthyPal
-We are group 7(13170500 Ng Man Yau Ian, 13419518 Wang Yusen, 13411810 Li Yang, 13385340 Wnag Ruizhi)our project name is HealthyPal.
+We are group 7(13170500 Ng Man Yau Ian, 13419518 Wang Yusen, 13411810 Li Yang, 13385340 Wang Ruizhi,13408290 Ye BoYang)our project name is HealthyPal.
 HealthyPal is a diet, social media application.Users can check the calories of their meal and share it with others who are dieting as well.
 We build a community of diet,to encourage and alert each other.
 
