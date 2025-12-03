@@ -99,13 +99,13 @@ To logout, there is a button on left bottom corner in the home page.Press it the
 The restful crud service are focusing on operation of post 
 
 1.create 
-user have to input the username, calories and caption of their post 
+it use the post request type to create a new post. User have to input the username, calories and caption of their post . To test this api, you can use: curl -X POST https://serversideproject-2-lvy0.onrender.com/api/posts -F "username=oan" -F "calories=1000" -F "caption=testing no image" -F "image=null" or  curl -X POST https://localhost:8080/api/posts -F "username=oan" -F "calories=1000" -F "caption=testing no image" -F "image=null" 
 
 2.read
-user have to input the username and it displays a list of posts that user has shared 
+it use the get request type to read .User have to input the username and it displays a list of posts that user has shared.To test this api you can use: curl -X GET https://serversideproject-2-lvy0.onrender.com/api/posts/oan or: curl -X GET https://localhost:8080/api/posts/oan 
 
 3.update 
-user have to fill in the post id, in the request body, fill in the calories and caption content that would like to update 
+it use the put request type to update. user have to fill in the post id, in the request body, fill in the calories and caption content that would like to update .To test this api, you can use : curl -X PUT -F "image=@(image path)" -F "caption=work please" -F "calories=1200" https://localhost8080/api/posts/(post id)or : curl -X PUT -F "image=@(image path)" -F "caption=work please" -F "calories=1200" https://serversideproject-2-lvy0.onrender.com/api/posts/(post id)
 
 4.Delete
-user have to fill in the post id only and the operation will success 
+it use the delete request type to delete. user have to fill in the post id only and the operation will success .To test this api you can use: curl -X DELETE https://serversideproject-2-lvy0.onrender.com/api/posts/(post id) or curl -X DELETE https://localhost8080/api/posts/(post id)
